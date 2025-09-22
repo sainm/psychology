@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mindvoice.psych.infra.mapper.SysQuestionnaireMapper">
+    <resultMap id="BaseResultMap" type="com.mindvoice.psych.infra.domain.SysQuestionnaire">
+        <id property="id" column="id"/>
+        <result property="code" column="code"/>
+        <result property="name" column="name"/>
+        <result property="description" column="description"/>
+        <result property="status" column="status"/>
+        <result property="createBy" column="create_by"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <select id="findById" parameterType="long" resultMap="BaseResultMap">
+        SELECT * FROM sys_questionnaire WHERE id = #{id}
+    </select>
+
+    <select id="findAll" resultMap="BaseResultMap">
+        SELECT * FROM sys_questionnaire
+    </select>
+
+    <insert id="insert" parameterType="com.example.domain.SysQuestionnaire" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO sys_questionnaire (code, name, description, status, create_by, update_by)
+        VALUES (#{code}, #{name}, #{description}, #{status}, #{createBy}, #{updateBy})
+    </insert>
+
+    <update id="update" parameterType="com.example.domain.SysQuestionnaire">
+        UPDATE sys_questionnaire
+        SET name=#{name}, description=#{description}, status=#{status},
+            update_by=#{updateBy}, update_time=NOW()
+        WHERE id=#{id}
+    </update>
+
+    <delete id="delete" parameterType="long">
+        DELETE FROM sys_questionnaire WHERE id=#{id}
+    </delete>
+
+</mapper>
