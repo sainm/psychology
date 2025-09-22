@@ -23,14 +23,14 @@ CREATE TABLE `sys_user`
 DROP TABLE IF EXISTS `sys_organization`;
 CREATE TABLE sys_organization
 (
-    id          BIGINT PRIMARY KEY AUTO_INCREMENT,
-    name        VARCHAR(100) NOT NULL UNIQUE,
-    parent_id   BIGINT    DEFAULT NULL COMMENT '上级组织ID，顶级组织为NULL',
-    status      TINYINT   DEFAULT 1 COMMENT '1=启用 0=禁用',
+    `id`          BIGINT PRIMARY KEY AUTO_INCREMENT,
+    `name`        VARCHAR(100) NOT NULL UNIQUE,
+    `parent_id`   BIGINT    DEFAULT NULL COMMENT '上级组织ID，顶级组织为NULL',
+    `status`      TINYINT   DEFAULT 1 COMMENT '1=启用 0=禁用',
     `create_by` BIGINT COMMENT '创建人ID',
     `update_by` BIGINT COMMENT '更新人ID',
-    created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    `created_at`  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    `updated_at`  TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (parent_id) REFERENCES sys_organization (id) ON DELETE SET NULL
 );
 
@@ -103,79 +103,114 @@ CREATE TABLE `sys_role_permission`
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4 COMMENT ='角色-权限关联表';
 
+-- 量表表
+DROP TABLE IF EXISTS sys_questionnaire;
+CREATE TABLE sys_questionnaire (
+   `id` BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '量表ID',
+   `code` VARCHAR(50) UNIQUE NOT NULL COMMENT '量表编码，如SCL90',
+   `name` VARCHAR(100) NOT NULL COMMENT '量表名称',
+   `description` TEXT COMMENT '量表说明',
+   `status` TINYINT DEFAULT 1 COMMENT '1=启用 0=停用',
+   `create_by` BIGINT COMMENT '创建人ID',
+   `update_by` BIGINT COMMENT '更新人ID',
+   `create_time` DATETIME DEFAULT CURRENT_TIMESTAMP,
+   `update_time` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- 量表/问卷表
-DROP TABLE IF EXISTS `psy_scale`;
-CREATE TABLE psy_scale
-(
-    id            BIGINT PRIMARY KEY AUTO_INCREMENT,
-    name          VARCHAR(100) NOT NULL,
-    description   TEXT,
-    `create_by`   BIGINT COMMENT '创建人ID',
-    `update_by`   BIGINT COMMENT '更新人ID',
-    `create_time` TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    `update_time` TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间'
-);
-
--- 题目表
-DROP TABLE IF EXISTS `psy_question`;
-CREATE TABLE psy_question
-(
-    id            BIGINT PRIMARY KEY AUTO_INCREMENT,
-    scale_id      BIGINT       NOT NULL,
-    content       VARCHAR(500) NOT NULL,
-    question_type TINYINT               DEFAULT 1 COMMENT '1=单选 2=多选 3=评分',
-    sort_order    INT,
-    `create_by`   BIGINT COMMENT '创建人ID',
-    `update_by`   BIGINT COMMENT '更新人ID',
-    `create_time` TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    `update_time` TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-    FOREIGN KEY (scale_id) REFERENCES psy_scale (id)
-);
+DROP TABLE IF EXISTS sys_question;
+CREATE TABLE sys_question (
+    `id` BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '题目ID',
+    `questionnaire_id` BIGINT NOT NULL COMMENT '所属量表ID',
+    `content` VARCHAR(500) NOT NULL COMMENT '题目内容',
+    `type` TINYINT DEFAULT 1 COMMENT '1=单选 2=多选 3=量表打分',
+    `order_no` INT COMMENT '题目顺序',
+    `create_by` BIGINT COMMENT '创建人ID',
+    `update_by` BIGINT COMMENT '更新人ID',
+    `create_time` DATETIME DEFAULT CURRENT_TIMESTAMP,
+    `update_time` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (questionnaire_id) REFERENCES sys_questionnaire(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- 选项表
-DROP TABLE IF EXISTS `psy_option_item`;
-CREATE TABLE psy_option_item
-(
-    id            BIGINT PRIMARY KEY AUTO_INCREMENT,
-    question_id   BIGINT       NOT NULL,
-    content       VARCHAR(200) NOT NULL,
-    score         INT                   DEFAULT 0 COMMENT '该选项对应的分值',
-    sort_order    INT,
-    `create_by`   BIGINT COMMENT '创建人ID',
-    `update_by`   BIGINT COMMENT '更新人ID',
-    `create_time` TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    `update_time` TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-    FOREIGN KEY (question_id) REFERENCES psy_question (id)
-);
-DROP TABLE IF EXISTS `psy_user_answer_sheet`;
+DROP TABLE IF EXISTS sys_question_option;
+CREATE TABLE sys_question_option (
+    `id` BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '选项ID',
+    `question_id` BIGINT NOT NULL COMMENT '所属题目ID',
+    `content` VARCHAR(200) NOT NULL COMMENT '选项内容',
+    `score` INT NOT NULL COMMENT '该选项分值',
+    `order_no` INT COMMENT '选项顺序',
+    FOREIGN KEY (question_id) REFERENCES sys_question(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 -- 用户答卷表
-CREATE TABLE psy_user_answer_sheet
-(
-    id            BIGINT PRIMARY KEY AUTO_INCREMENT,
-    user_id       BIGINT    NOT NULL,
-    scale_id      BIGINT    NOT NULL,
-    total_score   INT                DEFAULT 0,
-    result_text   VARCHAR(500),
-    `create_by`   BIGINT COMMENT '创建人ID',
-    `update_by`   BIGINT COMMENT '更新人ID',
-    `create_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    `update_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-    FOREIGN KEY (user_id) REFERENCES sys_user (id),
-    FOREIGN KEY (scale_id) REFERENCES psy_scale (id)
-);
-DROP TABLE IF EXISTS `psy_user_answer`;
--- 答案明细表
-CREATE TABLE psy_user_answer
-(
-    id          BIGINT PRIMARY KEY AUTO_INCREMENT,
-    sheet_id    BIGINT NOT NULL,
-    question_id BIGINT NOT NULL,
-    option_id   BIGINT,
-    score       INT DEFAULT 0,
-    FOREIGN KEY (sheet_id) REFERENCES psy_user_answer_sheet (id),
-    FOREIGN KEY (question_id) REFERENCES psy_question (id),
-    FOREIGN KEY (option_id) REFERENCES psy_option_item (id)
-);
+DROP TABLE IF EXISTS sys_user_answer_sheet;
+CREATE TABLE sys_user_answer_sheet (
+    `id` BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '答卷ID',
+    `user_id` BIGINT NOT NULL COMMENT '用户ID',
+    `questionnaire_id` BIGINT NOT NULL COMMENT '量表ID',
+    `total_score` INT DEFAULT 0 COMMENT '总分',
+    `status` TINYINT DEFAULT 0 COMMENT '0=未完成 1=已完成',
+    `create_time` DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `finished_at` DATETIME COMMENT '完成时间',
+    FOREIGN KEY (user_id) REFERENCES sys_user(id),
+    FOREIGN KEY (questionnaire_id) REFERENCES sys_questionnaire(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- 答题详情表
+DROP TABLE IF EXISTS sys_user_answer;
+CREATE TABLE sys_user_answer (
+    `id` BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '答题记录ID',
+    `answer_sheet_id` BIGINT NOT NULL COMMENT '答卷ID',
+    `question_id` BIGINT NOT NULL COMMENT '题目ID',
+    `option_id` BIGINT COMMENT '选项ID（多选时多条记录）',
+    `score` INT NOT NULL COMMENT '得分',
+    FOREIGN KEY (answer_sheet_id) REFERENCES sys_user_answer_sheet(id) ON DELETE CASCADE,
+    FOREIGN KEY (question_id) REFERENCES sys_question(id),
+    FOREIGN KEY (option_id) REFERENCES sys_question_option(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- 测评结果表
+DROP TABLE IF EXISTS sys_evaluation_result;
+CREATE TABLE sys_evaluation_result (
+    `id` BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '结果ID',
+    `answer_sheet_id` BIGINT NOT NULL COMMENT '答卷ID',
+    `dimension` VARCHAR(100) COMMENT '维度，如“抑郁”、“焦虑”',
+    `score` INT COMMENT '维度分数',
+    `interpretation` TEXT COMMENT '解释说明',
+    `create_time`DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (answer_sheet_id) REFERENCES sys_user_answer_sheet(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+-- 维度表
+DROP TABLE IF EXISTS sys_questionnaire_dimension;
+CREATE TABLE sys_questionnaire_dimension (
+     `id` BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '维度ID',
+     `questionnaire_id` BIGINT NOT NULL COMMENT '所属量表ID',
+     `code` VARCHAR(50) NOT NULL COMMENT '维度编码，如depression',
+     `name` VARCHAR(100) NOT NULL COMMENT '维度名称，如抑郁',
+     `description` TEXT COMMENT '维度说明',
+     FOREIGN KEY (questionnaire_id) REFERENCES sys_questionnaire(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- 维度-题目映射表
+DROP TABLE IF EXISTS sys_dimension_question_map;
+CREATE TABLE sys_dimension_question_map (
+    `id` BIGINT PRIMARY KEY AUTO_INCREMENT,
+    `dimension_id` BIGINT NOT NULL COMMENT '维度ID',
+    `question_id` BIGINT NOT NULL COMMENT '题目ID',
+    FOREIGN KEY (dimension_id) REFERENCES sys_questionnaire_dimension(id) ON DELETE CASCADE,
+    FOREIGN KEY (question_id) REFERENCES sys_question(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- 维度解释规则表
+DROP TABLE IF EXISTS sys_dimension_interpretation;
+CREATE TABLE sys_dimension_interpretation (
+    `id` BIGINT PRIMARY KEY AUTO_INCREMENT,
+    `dimension_id` BIGINT NOT NULL COMMENT '维度ID',
+    `min_score` INT NOT NULL COMMENT '最小分数',
+    `max_score` INT NOT NULL COMMENT '最大分数',
+    `interpretation` TEXT NOT NULL COMMENT '解释说明',
+    FOREIGN KEY (dimension_id) REFERENCES sys_questionnaire_dimension(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 
 SET FOREIGN_KEY_CHECKS = 1;
