@@ -1,11 +1,14 @@
 package com.mindvoice.psych.infra.domain;
 
+import com.mindvoice.psych.common.pojo.BaseDO;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.time.LocalDateTime;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
-public class SysPermission {
+public class SysPermission extends BaseDO {
     /**
      * 主键ID
      */
@@ -26,23 +29,4 @@ public class SysPermission {
      */
     private String description;
 
-    /**
-     * 创建人ID
-     */
-    private Long createBy;
-
-    /**
-     * 更新人ID
-     */
-    private Long updateBy;
-
-    /**
-     * 创建时间
-     */
-    private LocalDateTime createTime;
-
-    /**
-     * 更新时间
-     */
-    private LocalDateTime updateTime;
 }

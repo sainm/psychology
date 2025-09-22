@@ -4,27 +4,14 @@ import com.mindvoice.psych.common.pojo.BaseDO;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import java.util.List;
-
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class SysRole extends BaseDO {
-
-    /**
-     * 主键ID
-     */
+public class SysCompany extends BaseDO {
     private Long id;
 
-    /**
-     * 角色名称
-     */
-    private String roleName;
+    private String name;
 
-    /**
-     * 描述
-     */
     private String description;
 
-
-    private List<SysPermission> permissions;
+    private Boolean enabled;
 }

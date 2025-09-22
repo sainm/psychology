@@ -1,12 +1,14 @@
 package com.mindvoice.psych.infra.domain;
 
+import com.mindvoice.psych.common.pojo.BaseDO;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
-public class SysUser {
+public class SysUser extends BaseDO {
 
     /**
      * 主键ID
@@ -43,25 +45,6 @@ public class SysUser {
      */
     private String providerType;
 
-    /**
-     * 创建人ID
-     */
-    private Long createBy;
-
-    /**
-     * 更新人ID
-     */
-    private Long updateBy;
-
-    /**
-     * 创建时间
-     */
-    private LocalDateTime createTime;
-
-    /**
-     * 更新时间
-     */
-    private LocalDateTime updateTime;
 
     private List<SysRole> roles;
 }

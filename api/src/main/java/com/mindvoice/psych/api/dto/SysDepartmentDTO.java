@@ -6,9 +6,5 @@ import lombok.EqualsAndHashCode;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class SysUserDto extends BaseDTO {
-    private Long id;
-    private String username;
-    private String email;
-    private Integer status;
+public class SysDepartmentDTO extends BaseDTO {
 }

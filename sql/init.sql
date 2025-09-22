@@ -103,79 +103,108 @@ CREATE TABLE `sys_role_permission`
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4 COMMENT ='角色-权限关联表';
 
+DROP TABLE IF EXISTS `sys_company`;
+CREATE TABLE `sys_company`
+(
+    `id`           BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '公司ID',
+    `name`         VARCHAR(100) NOT NULL COMMENT '公司名称',
+    `description`  VARCHAR(100) DEFAULT '' COMMENT '公司类型/行业，例如互联网科技公司',
+    `status`       TINYINT      DEFAULT 1 COMMENT '状态: 1=活跃, 0=禁用',
+    `create_by`    BIGINT COMMENT '创建人ID',
+    `update_by`    BIGINT COMMENT '更新人ID',
+    `created_time` DATETIME     DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `updated_time` DATETIME     DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间'
+) COMMENT '公司信息表';
 
--- 量表/问卷表
-DROP TABLE IF EXISTS `psy_scale`;
-CREATE TABLE psy_scale
+DROP TABLE IF EXISTS `sys_department`;
+CREATE TABLE `sys_department`
 (
-    id            BIGINT PRIMARY KEY AUTO_INCREMENT,
-    name          VARCHAR(100) NOT NULL,
-    description   TEXT,
-    `create_by`   BIGINT COMMENT '创建人ID',
-    `update_by`   BIGINT COMMENT '更新人ID',
-    `create_time` TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    `update_time` TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间'
-);
+    `id`             BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '部门ID',
+    `company_id`     BIGINT       NOT NULL COMMENT '所属公司ID',
+    `name`           VARCHAR(100) NOT NULL COMMENT '部门名称',
+    `description`    VARCHAR(255) DEFAULT '' COMMENT '部门描述，例如“负责产品研发和维护”',
+    `status`         TINYINT      DEFAULT 1 COMMENT '状态: 1=活跃, 0=禁用',
+    `create_by`    BIGINT COMMENT '创建人ID',
+    `update_by`    BIGINT COMMENT '更新人ID',
+    `created_time`     DATETIME     DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `updated_time`     DATETIME     DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    CONSTRAINT fk_dept_company FOREIGN KEY (company_id) REFERENCES sys_company (id)
+) COMMENT '部门信息表';
 
--- 题目表
-DROP TABLE IF EXISTS `psy_question`;
-CREATE TABLE psy_question
-(
-    id            BIGINT PRIMARY KEY AUTO_INCREMENT,
-    scale_id      BIGINT       NOT NULL,
-    content       VARCHAR(500) NOT NULL,
-    question_type TINYINT               DEFAULT 1 COMMENT '1=单选 2=多选 3=评分',
-    sort_order    INT,
-    `create_by`   BIGINT COMMENT '创建人ID',
-    `update_by`   BIGINT COMMENT '更新人ID',
-    `create_time` TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    `update_time` TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-    FOREIGN KEY (scale_id) REFERENCES psy_scale (id)
-);
-
--- 选项表
-DROP TABLE IF EXISTS `psy_option_item`;
-CREATE TABLE psy_option_item
-(
-    id            BIGINT PRIMARY KEY AUTO_INCREMENT,
-    question_id   BIGINT       NOT NULL,
-    content       VARCHAR(200) NOT NULL,
-    score         INT                   DEFAULT 0 COMMENT '该选项对应的分值',
-    sort_order    INT,
-    `create_by`   BIGINT COMMENT '创建人ID',
-    `update_by`   BIGINT COMMENT '更新人ID',
-    `create_time` TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    `update_time` TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-    FOREIGN KEY (question_id) REFERENCES psy_question (id)
-);
-DROP TABLE IF EXISTS `psy_user_answer_sheet`;
--- 用户答卷表
-CREATE TABLE psy_user_answer_sheet
-(
-    id            BIGINT PRIMARY KEY AUTO_INCREMENT,
-    user_id       BIGINT    NOT NULL,
-    scale_id      BIGINT    NOT NULL,
-    total_score   INT                DEFAULT 0,
-    result_text   VARCHAR(500),
-    `create_by`   BIGINT COMMENT '创建人ID',
-    `update_by`   BIGINT COMMENT '更新人ID',
-    `create_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    `update_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-    FOREIGN KEY (user_id) REFERENCES sys_user (id),
-    FOREIGN KEY (scale_id) REFERENCES psy_scale (id)
-);
-DROP TABLE IF EXISTS `psy_user_answer`;
--- 答案明细表
-CREATE TABLE psy_user_answer
-(
-    id          BIGINT PRIMARY KEY AUTO_INCREMENT,
-    sheet_id    BIGINT NOT NULL,
-    question_id BIGINT NOT NULL,
-    option_id   BIGINT,
-    score       INT DEFAULT 0,
-    FOREIGN KEY (sheet_id) REFERENCES psy_user_answer_sheet (id),
-    FOREIGN KEY (question_id) REFERENCES psy_question (id),
-    FOREIGN KEY (option_id) REFERENCES psy_option_item (id)
-);
+#
+#
+# -- 量表/问卷表
+# DROP TABLE IF EXISTS `psy_scale`;
+# CREATE TABLE psy_scale
+# (
+#     id            BIGINT PRIMARY KEY AUTO_INCREMENT,
+#     name          VARCHAR(100) NOT NULL,
+#     description   TEXT,
+#     `create_by`   BIGINT COMMENT '创建人ID',
+#     `update_by`   BIGINT COMMENT '更新人ID',
+#     `create_time` TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+#     `update_time` TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间'
+# );
+#
+# -- 题目表
+# DROP TABLE IF EXISTS `psy_question`;
+# CREATE TABLE psy_question
+# (
+#     id            BIGINT PRIMARY KEY AUTO_INCREMENT,
+#     scale_id      BIGINT       NOT NULL,
+#     content       VARCHAR(500) NOT NULL,
+#     question_type TINYINT               DEFAULT 1 COMMENT '1=单选 2=多选 3=评分',
+#     sort_order    INT,
+#     `create_by`   BIGINT COMMENT '创建人ID',
+#     `update_by`   BIGINT COMMENT '更新人ID',
+#     `create_time` TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+#     `update_time` TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+#     FOREIGN KEY (scale_id) REFERENCES psy_scale (id)
+# );
+#
+# -- 选项表
+# DROP TABLE IF EXISTS `psy_option_item`;
+# CREATE TABLE psy_option_item
+# (
+#     id            BIGINT PRIMARY KEY AUTO_INCREMENT,
+#     question_id   BIGINT       NOT NULL,
+#     content       VARCHAR(200) NOT NULL,
+#     score         INT                   DEFAULT 0 COMMENT '该选项对应的分值',
+#     sort_order    INT,
+#     `create_by`   BIGINT COMMENT '创建人ID',
+#     `update_by`   BIGINT COMMENT '更新人ID',
+#     `create_time` TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+#     `update_time` TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+#     FOREIGN KEY (question_id) REFERENCES psy_question (id)
+# );
+# DROP TABLE IF EXISTS `psy_user_answer_sheet`;
+# -- 用户答卷表
+# CREATE TABLE psy_user_answer_sheet
+# (
+#     id            BIGINT PRIMARY KEY AUTO_INCREMENT,
+#     user_id       BIGINT    NOT NULL,
+#     scale_id      BIGINT    NOT NULL,
+#     total_score   INT                DEFAULT 0,
+#     result_text   VARCHAR(500),
+#     `create_by`   BIGINT COMMENT '创建人ID',
+#     `update_by`   BIGINT COMMENT '更新人ID',
+#     `create_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+#     `update_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+#     FOREIGN KEY (user_id) REFERENCES sys_user (id),
+#     FOREIGN KEY (scale_id) REFERENCES psy_scale (id)
+# );
+# DROP TABLE IF EXISTS `psy_user_answer`;
+# -- 答案明细表
+# CREATE TABLE psy_user_answer
+# (
+#     id          BIGINT PRIMARY KEY AUTO_INCREMENT,
+#     sheet_id    BIGINT NOT NULL,
+#     question_id BIGINT NOT NULL,
+#     option_id   BIGINT,
+#     score       INT DEFAULT 0,
+#     FOREIGN KEY (sheet_id) REFERENCES psy_user_answer_sheet (id),
+#     FOREIGN KEY (question_id) REFERENCES psy_question (id),
+#     FOREIGN KEY (option_id) REFERENCES psy_option_item (id)
+# );
 
 SET FOREIGN_KEY_CHECKS = 1;
