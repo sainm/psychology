@@ -1,15 +1,16 @@
-package com.youlai.boot.system.controller;
+package com.mindvoice.psych.system.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.youlai.boot.common.result.PageResult;
-import com.youlai.boot.common.result.Result;
-import com.youlai.boot.system.model.form.NoticeForm;
-import com.youlai.boot.system.model.query.NoticePageQuery;
-import com.youlai.boot.system.model.vo.NoticeDetailVO;
-import com.youlai.boot.system.model.vo.NoticePageVO;
-import com.youlai.boot.system.model.vo.UserNoticePageVO;
-import com.youlai.boot.system.service.NoticeService;
-import com.youlai.boot.system.service.UserNoticeService;
+
+import com.mindvoice.psych.common.result.PageResult;
+import com.mindvoice.psych.common.result.Result;
+import com.mindvoice.psych.system.model.form.NoticeForm;
+import com.mindvoice.psych.system.model.query.NoticePageQuery;
+import com.mindvoice.psych.system.model.vo.NoticeDetailVO;
+import com.mindvoice.psych.system.model.vo.NoticePageVO;
+import com.mindvoice.psych.system.model.vo.UserNoticePageVO;
+import com.mindvoice.psych.system.service.NoticeService;
+import com.mindvoice.psych.system.service.UserNoticeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;

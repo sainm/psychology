@@ -1,13 +1,13 @@
 package com.mindvoice.psych.system.mapper;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.youlai.boot.system.model.bo.VisitCount;
-import com.youlai.boot.system.model.bo.VisitStatsBO;
-import com.youlai.boot.system.model.entity.Log;
-import com.youlai.boot.system.model.query.LogPageQuery;
-import com.youlai.boot.system.model.vo.LogPageVO;
-import com.youlai.boot.system.model.vo.VisitStatsVO;
+
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.mindvoice.psych.system.model.bo.VisitCount;
+import com.mindvoice.psych.system.model.bo.VisitStatsBO;
+import com.mindvoice.psych.system.model.entity.Log;
+import com.mindvoice.psych.system.model.query.LogPageQuery;
+import com.mindvoice.psych.system.model.vo.LogPageVO;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;

@@ -1,7 +1,7 @@
 package com.mindvoice.psych.system.model.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.youlai.boot.common.base.BaseEntity;
+import com.mindvoice.psych.common.base.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

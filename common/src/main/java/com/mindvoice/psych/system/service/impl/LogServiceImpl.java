@@ -2,18 +2,18 @@ package com.mindvoice.psych.system.service.impl;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.youlai.boot.system.mapper.LogMapper;
-import com.youlai.boot.system.model.bo.VisitCount;
-import com.youlai.boot.system.model.bo.VisitStatsBO;
-import com.youlai.boot.system.model.entity.Log;
-import com.youlai.boot.system.model.query.LogPageQuery;
-import com.youlai.boot.system.model.vo.LogPageVO;
-import com.youlai.boot.system.model.vo.VisitStatsVO;
-import com.youlai.boot.system.model.vo.VisitTrendVO;
-import com.youlai.boot.system.service.LogService;
+
+import com.mindvoice.psych.system.mapper.LogMapper;
+import com.mindvoice.psych.system.model.bo.VisitCount;
+import com.mindvoice.psych.system.model.bo.VisitStatsBO;
+import com.mindvoice.psych.system.model.entity.Log;
+import com.mindvoice.psych.system.model.query.LogPageQuery;
+import com.mindvoice.psych.system.model.vo.LogPageVO;
+import com.mindvoice.psych.system.model.vo.VisitStatsVO;
+import com.mindvoice.psych.system.model.vo.VisitTrendVO;
+import com.mindvoice.psych.system.service.LogService;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;

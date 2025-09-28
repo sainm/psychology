@@ -1,6 +1,6 @@
 package com.mindvoice.psych.system.model.query;
 
-import com.youlai.boot.common.base.BasePageQuery;
+import com.mindvoice.psych.common.base.BasePageQuery;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

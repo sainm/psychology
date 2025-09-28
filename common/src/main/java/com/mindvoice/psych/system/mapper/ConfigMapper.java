@@ -1,7 +1,7 @@
 package com.mindvoice.psych.system.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.youlai.boot.system.model.entity.Config;
+import com.mindvoice.psych.system.model.entity.Config;
 import org.apache.ibatis.annotations.Mapper;
 
 /**

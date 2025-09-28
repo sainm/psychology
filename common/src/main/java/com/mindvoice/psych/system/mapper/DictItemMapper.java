@@ -2,9 +2,10 @@ package com.mindvoice.psych.system.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.youlai.boot.system.model.entity.DictItem;
-import com.youlai.boot.system.model.query.DictItemPageQuery;
-import com.youlai.boot.system.model.vo.DictItemPageVO;
+
+import com.mindvoice.psych.system.model.entity.DictItem;
+import com.mindvoice.psych.system.model.query.DictItemPageQuery;
+import com.mindvoice.psych.system.model.vo.DictItemPageVO;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
