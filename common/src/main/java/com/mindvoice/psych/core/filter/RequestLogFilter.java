@@ -1,6 +1,6 @@
 package com.mindvoice.psych.core.filter;
 
-import com.youlai.boot.common.util.IPUtils;
+import com.mindvoice.psych.common.util.IPUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
@@ -9,7 +9,7 @@ import org.springframework.web.filter.CommonsRequestLoggingFilter;
 /**
  * 请求日志打印过滤器
  *
- * @author haoxr
+ * @author liu
  * @since 2023/03/03
  */
 @Configuration

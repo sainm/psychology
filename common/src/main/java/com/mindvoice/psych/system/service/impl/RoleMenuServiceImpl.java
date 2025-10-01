@@ -2,12 +2,12 @@ package com.mindvoice.psych.system.service.impl;
 
 import cn.hutool.core.collection.CollectionUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.youlai.boot.common.constant.RedisConstants;
-import com.youlai.boot.system.mapper.RoleMenuMapper;
-import com.youlai.boot.system.model.bo.RolePermsBO;
-import com.youlai.boot.system.model.entity.RoleMenu;
-import com.youlai.boot.common.constant.SecurityConstants;
-import com.youlai.boot.system.service.RoleMenuService;
+import com.mindvoice.psych.common.constant.RedisConstants;
+import com.mindvoice.psych.system.mapper.RoleMenuMapper;
+import com.mindvoice.psych.system.model.bo.RolePermsBO;
+import com.mindvoice.psych.system.model.entity.RoleMenu;
+import com.mindvoice.psych.common.constant.SecurityConstants;
+import com.mindvoice.psych.system.service.RoleMenuService;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +20,7 @@ import java.util.Set;
 /**
  * 角色菜单服务实现类
  *
- * @author Ray.Hao
+ * @author liu
  * @since 2.5.0
  */
 @Service

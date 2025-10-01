@@ -1,8 +1,8 @@
 package com.mindvoice.psych.core.security.service;
 
-import com.youlai.boot.core.security.model.SysUserDetails;
-import com.youlai.boot.core.security.model.UserAuthCredentials;
-import com.youlai.boot.system.service.UserService;
+import com.mindvoice.psych.core.security.model.SysUserDetails;
+import com.mindvoice.psych.core.security.model.UserAuthCredentials;
+import com.mindvoice.psych.system.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 /**
  * 系统用户认证 DetailsService
  *
- * @author Ray.Hao
+ * @author liu
  * @since 2021/10/19
  */
 @Service

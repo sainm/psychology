@@ -6,7 +6,7 @@ import lombok.Getter;
 /**
  * 字典编码枚举
  *
- * @author Ray.Hao
+ * @author liu
  * @since 2024/10/30
  */
 @Getter

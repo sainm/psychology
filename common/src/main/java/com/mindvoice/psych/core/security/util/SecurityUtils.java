@@ -2,9 +2,9 @@ package com.mindvoice.psych.core.security.util;
 
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
-import com.youlai.boot.common.constant.SecurityConstants;
-import com.youlai.boot.common.constant.SystemConstants;
-import com.youlai.boot.core.security.model.SysUserDetails;
+import com.mindvoice.psych.common.constant.SecurityConstants;
+import com.mindvoice.psych.common.constant.SystemConstants;
+import com.mindvoice.psych.core.security.model.SysUserDetails;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.Authentication;
@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 /**
  * Spring Security 工具类
  *
- * @author Ray
+ * @author liu
  * @since 2021/1/10
  */
 public class SecurityUtils {

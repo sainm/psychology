@@ -1,4 +1,4 @@
-package com.youlai.boot.core.security.token;
+package com.mindvoice.psych.core.security.token;
 
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.date.DateUtil;
@@ -8,15 +8,15 @@ import cn.hutool.json.JSONObject;
 import cn.hutool.jwt.JWT;
 import cn.hutool.jwt.JWTPayload;
 import cn.hutool.jwt.JWTUtil;
-import com.youlai.boot.common.constant.JwtClaimConstants;
-import com.youlai.boot.common.constant.RedisConstants;
-import com.youlai.boot.common.constant.SecurityConstants;
-import com.youlai.boot.common.exception.BusinessException;
-import com.youlai.boot.common.result.ResultCode;
-import com.youlai.boot.config.property.SecurityProperties;
-import com.youlai.boot.core.security.model.AuthenticationToken;
+import com.mindvoice.psych.common.constant.JwtClaimConstants;
+import com.mindvoice.psych.common.constant.RedisConstants;
+import com.mindvoice.psych.common.constant.SecurityConstants;
+import com.mindvoice.psych.common.exception.BusinessException;
+import com.mindvoice.psych.common.result.ResultCode;
+import com.mindvoice.psych.config.property.SecurityProperties;
+import com.mindvoice.psych.core.security.model.AuthenticationToken;
 import org.apache.commons.lang3.StringUtils;
-import com.youlai.boot.core.security.model.SysUserDetails;
+import com.mindvoice.psych.core.security.model.SysUserDetails;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -37,7 +37,7 @@ import java.util.stream.Collectors;
  * <p>
  * 用于生成、解析、校验、刷新 JWT Token
  *
- * @author Ray.Hao
+ * @author liu
  * @since 2024/11/15
  */
 @ConditionalOnProperty(value = "security.session.type", havingValue = "jwt")
@@ -149,7 +149,7 @@ public class JwtTokenManager implements TokenManager {
                     }
                 }
                 // 判断是否在黑名单中，如果在，则返回 false 标识Token无效
-                if (Boolean.TRUE.equals(redisTemplate.hasKey(StrUtil.format(RedisConstants.Auth.BLACKLIST_TOKEN, jti)))) {
+                if (redisTemplate.hasKey(StrUtil.format(RedisConstants.Auth.BLACKLIST_TOKEN, jti))) {
                     return false;
                 }
             }
@@ -193,7 +193,6 @@ public class JwtTokenManager implements TokenManager {
             // 永不过期的Token永久加入黑名单
             redisTemplate.opsForValue().set(blacklistTokenKey, null);
         }
-        ;
     }
 
     /**

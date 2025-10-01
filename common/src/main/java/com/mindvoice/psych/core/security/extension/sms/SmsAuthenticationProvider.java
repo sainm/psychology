@@ -3,9 +3,11 @@ package com.mindvoice.psych.core.security.extension.sms;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 
-import com.youlai.boot.core.security.model.SysUserDetails;
-import com.youlai.boot.core.security.model.UserAuthCredentials;
-import com.youlai.boot.system.service.UserService;
+import com.mindvoice.psych.common.constant.RedisConstants;
+import com.mindvoice.psych.core.security.exception.CaptchaValidationException;
+import com.mindvoice.psych.core.security.model.SysUserDetails;
+import com.mindvoice.psych.core.security.model.UserAuthCredentials;
+import com.mindvoice.psych.system.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -18,7 +20,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 /**
  * 短信验证码认证 Provider
  *
- * @author Ray.Hao
+ * @author liu
  * @since 2.17.0
  */
 @Slf4j

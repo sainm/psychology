@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 /**
  * 系统日志 服务实现类
  *
- * @author Ray.Hao
+ * @author liu
  * @since 2.10.0
  */
 @Service

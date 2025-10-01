@@ -12,7 +12,7 @@ import com.mindvoice.psych.system.model.vo.UserNoticePageVO;
 /**
  * 通知公告服务类
  *
- * @author youlaitech
+ * @author liu
  * @since 2024-08-27 10:31
  */
 public interface NoticeService extends IService<Notice> {

@@ -9,8 +9,8 @@ import java.util.List;
 /**
  * 分页响应结构体
  *
- * @author Ray
- * @since 2022/2/18
+ * @author liu
+ * @since 2025/2/18
  */
 @Data
 public class PageResult<T> implements Serializable {

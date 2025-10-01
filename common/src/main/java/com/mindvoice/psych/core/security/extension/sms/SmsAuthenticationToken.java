@@ -9,7 +9,7 @@ import java.util.Collection;
 /**
  * 短信验证码认证 Token
  *
- * @author Ray.Hao
+ * @author liu
  * @since 2.20.0
  */
 public class SmsAuthenticationToken extends AbstractAuthenticationToken {

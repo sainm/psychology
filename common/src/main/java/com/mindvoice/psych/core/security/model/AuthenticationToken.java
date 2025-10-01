@@ -7,7 +7,7 @@ import lombok.Data;
 /**
  * 认证令牌响应对象
  *
- * @author Ray.Hao
+ * @author liu
  * @since 0.0.1
  */
 @Schema(description = "认证令牌响应对象")

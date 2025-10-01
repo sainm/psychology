@@ -1,12 +1,13 @@
-package com.youlai.boot.system.mapper;
+package com.mindvoice.psych.system.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.youlai.boot.system.model.entity.UserNotice;
-import com.youlai.boot.system.model.query.NoticePageQuery;
-import com.youlai.boot.system.model.vo.NoticePageVO;
-import com.youlai.boot.system.model.vo.UserNoticePageVO;
+
+import com.mindvoice.psych.system.model.entity.UserNotice;
+import com.mindvoice.psych.system.model.query.NoticePageQuery;
+import com.mindvoice.psych.system.model.vo.NoticePageVO;
+import com.mindvoice.psych.system.model.vo.UserNoticePageVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -15,7 +16,7 @@ import java.util.List;
 /**
  * 用户公告状态Mapper接口
  *
- * @author youlaitech
+ * @author liu
  * @since 2024-08-28 16:56
  */
 @Mapper

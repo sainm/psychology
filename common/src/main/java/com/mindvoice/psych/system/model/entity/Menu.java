@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 /**
  * 菜单实体
  *
- * @author Ray.Hao
+ * @author liu
  * @since 2023/3/6
  */
 @TableName("sys_menu")

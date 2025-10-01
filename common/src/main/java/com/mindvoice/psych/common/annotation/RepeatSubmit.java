@@ -8,7 +8,7 @@ import java.lang.annotation.*;
  * <p>
  * 该注解用于方法上，防止在指定时间内的重复提交。 默认时间为5秒。
  *
- * @author Ray.Hao
+ * @author liu
  * @since 2.3.0
  */
 @Target(ElementType.METHOD)

@@ -7,7 +7,7 @@ import lombok.Data;
 /**
  * 修改邮箱表单
  *
- * @author Ray.Hao
+ * @author liu
  * @since 2024/8/19
  */
 @Schema(description = "修改邮箱表单")

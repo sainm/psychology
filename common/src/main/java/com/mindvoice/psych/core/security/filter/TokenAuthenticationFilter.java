@@ -1,14 +1,15 @@
 package com.mindvoice.psych.core.security.filter;
 
 import cn.hutool.core.util.StrUtil;
-import com.youlai.boot.common.constant.SecurityConstants;
-import com.youlai.boot.common.result.ResultCode;
-import com.youlai.boot.common.util.ResponseUtils;
-import com.youlai.boot.core.security.token.TokenManager;
+import com.mindvoice.psych.common.constant.SecurityConstants;
+import com.mindvoice.psych.common.result.ResultCode;
+import com.mindvoice.psych.common.util.ResponseUtils;
+import com.mindvoice.psych.core.security.token.TokenManager;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -38,7 +39,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
      * 如果 Token 有效，将 Token 解析为 Authentication 对象，并设置到 Spring Security 上下文中
      */
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, @NotNull HttpServletResponse response, @NotNull FilterChain filterChain) throws ServletException, IOException {
 
         String authorizationHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
 

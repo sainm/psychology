@@ -5,7 +5,7 @@ import lombok.Data;
 /**
  * 字典更新事件
  *
- * @author Ray.Hao
+ * @author liu
  * @since 3.0.0
  */
 @Data

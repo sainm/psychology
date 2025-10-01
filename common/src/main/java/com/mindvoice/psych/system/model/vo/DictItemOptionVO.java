@@ -7,7 +7,7 @@ import lombok.Setter;
 /**
  * 字典项键值对象
  *
- * @author Ray.Hao
+ * @author liu
  * @since 0.0.1
  */
 @Schema(description = "字典项键值对象")

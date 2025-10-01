@@ -7,7 +7,7 @@ import lombok.Getter;
 /**
  * 通知目标类型枚举
  *
- * @author Ray.Hao
+ * @author liu
  * @since 2024/10/14
  */
 @Getter

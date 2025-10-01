@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * 字典分页VO
  *
- * @author Ray
+ * @author liu
  * @since 0.0.1
  */
 @Schema(description = "字典分页对象")

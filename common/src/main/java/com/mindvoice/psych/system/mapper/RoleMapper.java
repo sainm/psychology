@@ -1,7 +1,7 @@
-package com.youlai.boot.system.mapper;
+package com.mindvoice.psych.system.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.youlai.boot.system.model.entity.Role;
+import com.mindvoice.psych.system.model.entity.Role;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.Set;
@@ -9,8 +9,8 @@ import java.util.Set;
 /**
  * 角色持久层接口
  *
- * @author Ray.Hao
- * @since 2022/1/14
+ * @author liu
+ * @since 2025/1/14
  */
 @Mapper
 public interface RoleMapper extends BaseMapper<Role> {

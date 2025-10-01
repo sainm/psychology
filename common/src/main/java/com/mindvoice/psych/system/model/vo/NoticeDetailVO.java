@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 /**
  * 阅读通知公告VO
  *
- * @author Theo
+ * @author liu
  * @since 2024-9-8 01:25:06
  */
 @Data

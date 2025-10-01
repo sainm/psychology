@@ -3,19 +3,19 @@ package com.mindvoice.psych.config;
 import cn.binarywang.wx.miniapp.api.WxMaService;
 import cn.hutool.captcha.generator.CodeGenerator;
 import cn.hutool.core.util.ArrayUtil;
-import com.youlai.boot.config.property.SecurityProperties;
-import com.youlai.boot.core.filter.RateLimiterFilter;
-import com.youlai.boot.core.security.exception.MyAccessDeniedHandler;
-import com.youlai.boot.core.security.exception.MyAuthenticationEntryPoint;
-import com.youlai.boot.core.security.extension.sms.SmsAuthenticationProvider;
-import com.youlai.boot.core.security.extension.wx.WxMiniAppCodeAuthenticationProvider;
-import com.youlai.boot.core.security.extension.wx.WxMiniAppPhoneAuthenticationProvider;
-import com.youlai.boot.core.security.filter.CaptchaValidationFilter;
-import com.youlai.boot.core.security.filter.TokenAuthenticationFilter;
-import com.youlai.boot.core.security.token.TokenManager;
-import com.youlai.boot.core.security.service.SysUserDetailsService;
-import com.youlai.boot.system.service.ConfigService;
-import com.youlai.boot.system.service.UserService;
+import com.mindvoice.psych.config.property.SecurityProperties;
+import com.mindvoice.psych.core.filter.RateLimiterFilter;
+import com.mindvoice.psych.core.security.exception.MyAccessDeniedHandler;
+import com.mindvoice.psych.core.security.exception.MyAuthenticationEntryPoint;
+import com.mindvoice.psych.core.security.extension.sms.SmsAuthenticationProvider;
+import com.mindvoice.psych.core.security.extension.wx.WxMiniAppCodeAuthenticationProvider;
+import com.mindvoice.psych.core.security.extension.wx.WxMiniAppPhoneAuthenticationProvider;
+import com.mindvoice.psych.core.security.filter.CaptchaValidationFilter;
+import com.mindvoice.psych.core.security.filter.TokenAuthenticationFilter;
+import com.mindvoice.psych.core.security.token.TokenManager;
+import com.mindvoice.psych.core.security.service.SysUserDetailsService;
+import com.mindvoice.psych.system.service.ConfigService;
+import com.mindvoice.psych.system.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -37,7 +37,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 /**
  * Spring Security 配置类
  *
- * @author Ray.Hao
+ * @author liu
  * @since 2023/2/17
  */
 @Configuration

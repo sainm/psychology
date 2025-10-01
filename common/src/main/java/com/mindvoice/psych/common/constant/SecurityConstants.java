@@ -3,7 +3,7 @@ package com.mindvoice.psych.common.constant;
 /**
  * 安全模块常量
  *
- * @author Ray.Hao
+ * @author liu
  * @since 2023/11/24
  */
 public interface SecurityConstants {

@@ -1,14 +1,14 @@
-package com.youlai.boot.system.mapper;
+package com.mindvoice.psych.system.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.youlai.boot.system.model.entity.UserRole;
+import com.mindvoice.psych.system.model.entity.UserRole;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
  * 用户角色访问层
  *
- * @author haoxr
- * @since 2022/1/15
+ * @author liu
+ * @since 2025/1/15
  */
 @Mapper
 public interface UserRoleMapper extends BaseMapper<UserRole> {

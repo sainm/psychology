@@ -32,7 +32,7 @@ import java.util.List;
 /**
  * 字典控制层
  *
- * @author Ray.Hao
+ * @author liu
  * @since 2.9.0
  */
 @Tag(name = "06.字典接口")

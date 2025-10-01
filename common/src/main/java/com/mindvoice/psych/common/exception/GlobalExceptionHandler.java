@@ -2,8 +2,8 @@ package com.mindvoice.psych.common.exception;
 
 import cn.hutool.core.util.StrUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.youlai.boot.common.result.Result;
-import com.youlai.boot.common.result.ResultCode;
+import com.mindvoice.psych.common.result.Result;
+import com.mindvoice.psych.common.result.ResultCode;
 import jakarta.servlet.ServletException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;

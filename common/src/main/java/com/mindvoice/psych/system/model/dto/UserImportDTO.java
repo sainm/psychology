@@ -1,13 +1,13 @@
 package com.mindvoice.psych.system.model.dto;
 
-import cn.idev.excel.annotation.ExcelProperty;
+import com.alibaba.excel.annotation.ExcelProperty;
 import lombok.Data;
 
 /**
  * 用户导入对象
  *
- * @author Ray.Hao
- * @since 2022/4/10
+ * @author liu
+ * @since 2025/4/10
  */
 @Data
 public class UserImportDTO {

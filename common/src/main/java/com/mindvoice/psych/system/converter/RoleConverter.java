@@ -1,10 +1,11 @@
 package com.mindvoice.psych.system.converter;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.youlai.boot.system.model.entity.Role;
-import com.youlai.boot.system.model.vo.RolePageVO;
-import com.youlai.boot.common.model.Option;
-import com.youlai.boot.system.model.form.RoleForm;
+
+import com.mindvoice.psych.common.model.Option;
+import com.mindvoice.psych.system.model.entity.Role;
+import com.mindvoice.psych.system.model.form.RoleForm;
+import com.mindvoice.psych.system.model.vo.RolePageVO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
@@ -14,8 +15,8 @@ import java.util.List;
 /**
  * 角色对象转换器
  *
- * @author haoxr
- * @since 2022/5/29
+ * @author liu
+ * @since 2025/5/29
  */
 @Mapper(componentModel = "spring")
 public interface RoleConverter {

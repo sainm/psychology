@@ -14,8 +14,8 @@ import java.util.List;
 /**
  * 字典业务接口
  *
- * @author haoxr
- * @since 2022/10/12
+ * @author liu
+ * @since 2025/10/12
  */
 public interface DictService extends IService<Dict> {
 

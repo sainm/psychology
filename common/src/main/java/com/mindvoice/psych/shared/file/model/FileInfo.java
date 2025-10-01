@@ -7,7 +7,7 @@ import lombok.Data;
 /**
  * 文件信息对象
  *
- * @author Ray.Hao
+ * @author liu
  * @since 1.0.0
  */
 @Schema(description = "文件对象")

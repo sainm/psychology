@@ -1,8 +1,8 @@
 package com.mindvoice.psych.shared.file.controller;
 
 import com.mindvoice.psych.common.result.Result;
-import com.youlai.boot.shared.file.service.FileService;
-import com.youlai.boot.shared.file.model.FileInfo;
+import com.mindvoice.psych.shared.file.service.FileService;
+import com.mindvoice.psych.shared.file.model.FileInfo;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -16,8 +16,8 @@ import org.springframework.web.multipart.MultipartFile;
 /**
  * 文件控制层
  *
- * @author Ray.Hao
- * @since 2022/10/16
+ * @author liu
+ * @since 2025/10/16
  */
 @Tag(name = "07.文件接口")
 @RestController

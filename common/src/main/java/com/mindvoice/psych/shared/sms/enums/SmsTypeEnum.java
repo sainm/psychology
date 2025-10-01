@@ -8,7 +8,7 @@ import lombok.Getter;
  * <p>
  * value 值对应 application-*.yml 中的 sms.templates.* 配置
  *
- * @author Ray.Hao
+ * @author liu
  * @since 2.21.0
  */
 @Getter

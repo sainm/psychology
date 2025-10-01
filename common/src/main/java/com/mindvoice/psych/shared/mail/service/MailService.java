@@ -3,7 +3,7 @@ package com.mindvoice.psych.shared.mail.service;
 /**
  * 邮件服务接口层
  *
- * @author Ray
+ * @author liu
  * @since 2024/8/17
  */
 public interface MailService {

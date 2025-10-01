@@ -1,6 +1,8 @@
 package com.mindvoice.psych.system.controller;
 
 
+import com.alibaba.excel.EasyExcel;
+import com.alibaba.excel.ExcelWriter;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 
@@ -16,7 +18,6 @@ import com.mindvoice.psych.core.security.util.SecurityUtils;
 import com.mindvoice.psych.system.listener.UserImportListener;
 import com.mindvoice.psych.system.model.dto.CurrentUserDTO;
 import com.mindvoice.psych.system.model.dto.UserExportDTO;
-import com.mindvoice.psych.system.model.dto.UserImportDTO;
 import com.mindvoice.psych.system.model.entity.User;
 import com.mindvoice.psych.system.model.form.*;
 import com.mindvoice.psych.system.model.query.UserPageQuery;
@@ -45,8 +46,8 @@ import java.util.List;
 /**
  * 用户控制层
  *
- * @author Ray.Hao
- * @since 2022/10/16
+ * @author liu
+ * @since 2025/10/16
  */
 @Tag(name = "02.用户接口")
 @RestController
@@ -160,7 +161,7 @@ public class UserController {
     @Log(value = "导入用户", module = LogModuleEnum.USER)
     public Result<ExcelResult> importUsers(MultipartFile file) throws IOException {
         UserImportListener listener = new UserImportListener();
-        ExcelUtils.importExcel(file.getInputStream(), UserImportDTO.class, listener);
+//        ExcelUtils.importExcel(file.getInputStream(), UserImportDTO.class, listener);
         return Result.success(listener.getExcelResult());
     }
 

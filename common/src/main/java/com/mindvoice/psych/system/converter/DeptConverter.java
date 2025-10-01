@@ -9,8 +9,8 @@ import org.mapstruct.Mapper;
 /**
  * 部门对象转换器
  *
- * @author haoxr
- * @since 2022/7/29
+ * @author liu
+ * @since 2025/7/29
  */
 @Mapper(componentModel = "spring")
 public interface DeptConverter {

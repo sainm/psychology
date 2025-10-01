@@ -8,7 +8,7 @@ import java.lang.annotation.*;
 /**
  * 日志注解
  *
- * @author Ray
+ * @author liu
  * @since 2024/6/25
  */
 @Retention(RetentionPolicy.RUNTIME)

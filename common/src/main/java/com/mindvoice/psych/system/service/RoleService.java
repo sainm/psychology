@@ -16,8 +16,8 @@ import java.util.Set;
 /**
  * 角色业务接口层
  *
- * @author haoxr
- * @since 2022/6/3
+ * @author liu
+ * @since 2025/6/3
  */
 public interface RoleService extends IService<Role> {
 

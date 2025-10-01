@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * 字典表单对象
  *
- * @author Ray Hao
+ * @author liu
  * @since 2.9.0
  */
 @Schema(description = "字典")

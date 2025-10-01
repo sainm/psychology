@@ -7,7 +7,7 @@ import lombok.Data;
 /**
  * 字典项表单对象
  *
- * @author Ray Hao
+ * @author liu
  * @since 2.9.0
  */
 @Schema(description = "字典项表单")

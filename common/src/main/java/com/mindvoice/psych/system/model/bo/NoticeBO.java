@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 /**
  * 通知公告业务对象
  *
- * @author Theo
+ * @author liu
  * @since 2024-09-01 10:31
  */
 @Data

@@ -8,8 +8,8 @@ import java.util.Set;
 /**
  * 当前登录用户对象
  *
- * @author haoxr
- * @since 2022/1/14
+ * @author liu
+ * @since 2025/1/14
  */
 @Data
 public class CurrentUserDTO {

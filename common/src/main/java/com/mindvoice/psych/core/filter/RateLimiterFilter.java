@@ -2,12 +2,12 @@ package com.mindvoice.psych.core.filter;
 
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.util.StrUtil;
-import com.youlai.boot.common.constant.RedisConstants;
-import com.youlai.boot.common.constant.SystemConstants;
-import com.youlai.boot.common.result.ResultCode;
-import com.youlai.boot.common.util.IPUtils;
-import com.youlai.boot.common.util.ResponseUtils;
-import com.youlai.boot.system.service.ConfigService;
+import com.mindvoice.psych.common.constant.RedisConstants;
+import com.mindvoice.psych.common.constant.SystemConstants;
+import com.mindvoice.psych.common.result.ResultCode;
+import com.mindvoice.psych.common.util.IPUtils;
+import com.mindvoice.psych.common.util.ResponseUtils;
+import com.mindvoice.psych.system.service.ConfigService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,7 +23,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * IP 限流过滤器
  *
- * @author Theo
+ * @author liu
  * @since 2024/08/10 14:38
  */
 @Slf4j

@@ -1,9 +1,9 @@
 package com.mindvoice.psych.config;
 
 import cn.hutool.core.util.StrUtil;
-import com.youlai.boot.core.security.model.SysUserDetails;
-import com.youlai.boot.core.security.token.TokenManager;
-import com.youlai.boot.system.service.WebSocketService;
+import com.mindvoice.psych.core.security.model.SysUserDetails;
+import com.mindvoice.psych.core.security.token.TokenManager;
+import com.mindvoice.psych.system.service.WebSocketService;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.context.annotation.Configuration;
@@ -29,7 +29,7 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 /**
  * WebSocket配置
  *
- * @author Ray.Hao
+ * @author liu
  * @since 3.0.0
  */
 @EnableWebSocketMessageBroker

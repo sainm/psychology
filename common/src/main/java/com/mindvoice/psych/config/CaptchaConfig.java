@@ -1,6 +1,9 @@
 package com.mindvoice.psych.config;
 
 
+import cn.hutool.captcha.generator.CodeGenerator;
+import cn.hutool.captcha.generator.MathGenerator;
+import cn.hutool.captcha.generator.RandomGenerator;
 import com.mindvoice.psych.config.property.CaptchaProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -11,7 +14,7 @@ import java.awt.*;
 /**
  * 验证码自动装配配置
  *
- * @author haoxr
+ * @author liu
  * @since 2023/11/24
  */
 @Configuration

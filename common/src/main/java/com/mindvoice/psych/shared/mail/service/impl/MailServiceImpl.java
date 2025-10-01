@@ -1,7 +1,7 @@
-package com.youlai.boot.shared.mail.service.impl;
+package com.mindvoice.psych.shared.mail.service.impl;
 
-import com.youlai.boot.config.property.MailProperties;
-import com.youlai.boot.shared.mail.service.MailService;
+import com.mindvoice.psych.config.property.MailProperties;
+import com.mindvoice.psych.shared.mail.service.MailService;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +17,7 @@ import java.io.File;
 /**
  * 邮件服务实现类
  *
- * @author Ray
+ * @author liu
  * @since 2024/8/17
  */
 @Service

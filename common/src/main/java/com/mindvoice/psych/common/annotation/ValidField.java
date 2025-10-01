@@ -1,6 +1,6 @@
 package com.mindvoice.psych.common.annotation;
 
-import com.youlai.boot.core.validator.FieldValidator;
+import com.mindvoice.psych.core.validator.FieldValidator;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 
@@ -9,7 +9,7 @@ import java.lang.annotation.*;
 /**
  * 用于验证字段值是否合法的注解
  *
- * @author Ray.Hao
+ * @author liu
  * @since 2.18.0
  */
 @Documented

@@ -22,8 +22,8 @@ import org.springframework.web.bind.annotation.*;
 /**
  * 认证控制层
  *
- * @author Ray.Hao
- * @since 2022/10/16
+ * @author liu
+ * @since 2025/10/16
  */
 @RestController
 @RequestMapping("/api/v1/auth")

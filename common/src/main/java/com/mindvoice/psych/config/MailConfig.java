@@ -1,6 +1,6 @@
 package com.mindvoice.psych.config;
 
-import com.youlai.boot.config.property.MailProperties;
+import com.mindvoice.psych.config.property.MailProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,7 +16,7 @@ import java.util.Properties;
  * 手动注入的原因是为了避免在使用 application-dev.yml 或其他非 application.yml 配置文件时，
  * IDEA 提示无法找到 JavaMailSender 的 bean。
  *
- * @author Ray
+ * @author liu
  * @since 2024/8/17
  */
 @Configuration

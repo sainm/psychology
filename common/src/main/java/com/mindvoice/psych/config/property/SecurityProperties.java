@@ -13,7 +13,7 @@ import org.springframework.validation.annotation.Validated;
  *
  * <p>映射 application.yml 中 security 前缀的安全相关配置</p>
  *
- * @author Ray.Hao
+ * @author liu
  * @since 2024/4/18
  */
 @Data

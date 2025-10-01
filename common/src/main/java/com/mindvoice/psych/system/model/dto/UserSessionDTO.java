@@ -1,4 +1,4 @@
-package com.youlai.boot.system.model.dto;
+package com.mindvoice.psych.system.model.dto;
 
 import lombok.Data;
 
@@ -8,7 +8,7 @@ import java.util.Set;
 /**
  * 用户会话DTO
  *
- * @author Ray.Hao
+ * @author liu
  * @since 3.0.0
  */
 @Data

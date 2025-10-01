@@ -1,6 +1,6 @@
 package com.mindvoice.psych.system.model.query;
 
-import com.youlai.boot.common.base.BasePageQuery;
+import com.mindvoice.psych.common.base.BasePageQuery;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
@@ -8,7 +8,7 @@ import lombok.Setter;
 /**
  * 系统配置查询对象
  *
- * @author Theo
+ * @author liu
  * @since 2024-7-29 11:38:00
  */
 @Getter

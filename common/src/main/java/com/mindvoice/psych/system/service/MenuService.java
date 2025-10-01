@@ -15,7 +15,7 @@ import java.util.Set;
 /**
  * 菜单业务接口
  * 
- * @author haoxr
+ * @author liu
  * @since 2020/11/06
  */
 public interface MenuService extends IService<Menu> {
@@ -79,5 +79,5 @@ public interface MenuService extends IService<Menu> {
      * @param parentMenuId 父菜单ID
      * @param genConfig   实体名
      */
-    void addMenuForCodegen(Long parentMenuId, GenConfig genConfig);
+//    void addMenuForCodegen(Long parentMenuId, GenConfig genConfig);
 }

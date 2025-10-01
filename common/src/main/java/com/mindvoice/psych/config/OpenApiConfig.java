@@ -1,7 +1,7 @@
 package com.mindvoice.psych.config;
 
 import cn.hutool.core.util.ArrayUtil;
-import com.youlai.boot.config.property.SecurityProperties;
+import com.mindvoice.psych.config.property.SecurityProperties;
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Contact;
@@ -23,7 +23,7 @@ import java.util.stream.Stream;
 /**
  * OpenAPI 接口文档配置
  *
- * @author Ray.Hao
+ * @author liu
  * @see <a href="https://doc.xiaominfo.com/docs/quick-start">knife4j 快速开始</a>
  * @since 2023/2/17
  */

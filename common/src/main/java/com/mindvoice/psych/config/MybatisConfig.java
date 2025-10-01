@@ -4,18 +4,18 @@ import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.core.config.GlobalConfig;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.DataPermissionInterceptor;
-import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
-import com.youlai.boot.pulgin.mybatis.MyDataPermissionHandler;
-import com.youlai.boot.pulgin.mybatis.MyMetaObjectHandler;
+import com.mindvoice.psych.pulgin.mybatis.MyDataPermissionHandler;
+import com.mindvoice.psych.pulgin.mybatis.MyMetaObjectHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
 
 /**
  * mybatis-plus 配置类
  *
- * @author Ray.Hao
- * @since 2022/7/2
+ * @author liu
+ * @since 2025/7/2
  */
 @Configuration
 @EnableTransactionManagement
@@ -30,7 +30,7 @@ public class MybatisConfig {
         //数据权限
         interceptor.addInnerInterceptor(new DataPermissionInterceptor(new MyDataPermissionHandler()));
         //分页插件
-        interceptor.addInnerInterceptor(new PaginationInnerInterceptor(DbType.MYSQL));
+        interceptor.addInnerInterceptor(new PaginationInnerInterceptor(DbType.MARIADB));
 
         return interceptor;
     }

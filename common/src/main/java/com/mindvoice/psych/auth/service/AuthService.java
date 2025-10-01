@@ -9,7 +9,7 @@ import com.mindvoice.psych.core.security.model.AuthenticationToken;
 /**
  * 认证服务接口
  *
- * @author Ray.Hao
+ * @author liu
  * @since 2.4.0
  */
 public interface AuthService {

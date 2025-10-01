@@ -1,4 +1,4 @@
-package com.youlai.boot.shared.websocket.model;
+package com.mindvoice.psych.shared.websocket.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -7,18 +7,18 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.spring.SpringUtil;
 import cn.hutool.json.JSONUtil;
 
+import com.alibaba.excel.context.AnalysisContext;
 import com.alibaba.excel.event.AnalysisEventListener;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 
+import com.mindvoice.psych.common.constant.SystemConstants;
+import com.mindvoice.psych.common.enums.StatusEnum;
 import com.mindvoice.psych.common.result.ExcelResult;
 import com.mindvoice.psych.system.converter.UserConverter;
+import com.mindvoice.psych.system.enums.DictCodeEnum;
 import com.mindvoice.psych.system.model.dto.UserImportDTO;
-import com.mindvoice.psych.system.model.entity.Dept;
-import com.mindvoice.psych.system.model.entity.DictItem;
-import com.mindvoice.psych.system.model.entity.Role;
-import com.mindvoice.psych.system.service.RoleService;
-import com.mindvoice.psych.system.service.UserRoleService;
-import com.mindvoice.psych.system.service.UserService;
+import com.mindvoice.psych.system.model.entity.*;
+import com.mindvoice.psych.system.service.*;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -31,14 +31,12 @@ import java.util.stream.Collectors;
 /**
  * 用户导入监听器
  * <p>
- * <a href="https://easyexcel.opensource.alibaba.com/docs/current/quickstart/read#%E6%9C%80%E7%AE%80%E5%8D%95%E7%9A%84%E8%AF%BB%E7%9A%84%E7%9B%91%E5%90%AC%E5%99%A8">最简单的读的监听器</a>
  *
- * @author Ray
- * @since 2022/4/10
+ * @author liu
+ * @since 2025/4/10
  */
 @Slf4j
 public class UserImportListener extends AnalysisEventListener<UserImportDTO> {
-
     /**
      * Excel 导入结果
      */

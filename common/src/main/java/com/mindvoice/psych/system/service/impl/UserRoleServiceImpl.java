@@ -3,11 +3,11 @@ package com.mindvoice.psych.system.service.impl;
 import cn.hutool.core.collection.CollectionUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.youlai.boot.core.security.token.TokenManager;
-import com.youlai.boot.core.security.util.SecurityUtils;
-import com.youlai.boot.system.mapper.UserRoleMapper;
-import com.youlai.boot.system.model.entity.UserRole;
-import com.youlai.boot.system.service.UserRoleService;
+import com.mindvoice.psych.core.security.token.TokenManager;
+import com.mindvoice.psych.core.security.util.SecurityUtils;
+import com.mindvoice.psych.system.mapper.UserRoleMapper;
+import com.mindvoice.psych.system.model.entity.UserRole;
+import com.mindvoice.psych.system.service.UserRoleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

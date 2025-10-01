@@ -21,8 +21,8 @@ import java.util.List;
 /**
  * 字典项实现类
  *
- * @author Ray.Hao
- * @since 2022/10/12
+ * @author liu
+ * @since 2025/10/12
  */
 @Service
 @RequiredArgsConstructor

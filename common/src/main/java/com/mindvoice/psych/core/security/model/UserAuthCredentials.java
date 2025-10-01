@@ -6,8 +6,8 @@ import java.util.Set;
 /**
  * 用户认证凭证信息
  *
- * @author Ray.Hao
- * @since 2022/10/22
+ * @author liu
+ * @since 2025/10/22
  */
 @Data
 public class UserAuthCredentials {
@@ -50,7 +50,7 @@ public class UserAuthCredentials {
     /**
      * 数据权限范围，用于控制用户可以访问的数据级别
      *
-     * @see com.youlai.boot.common.enums.DataScopeEnum
+     * @see com.mindvoice.psych.common.enums.DataScopeEnum
      */
     private Integer dataScope;
 

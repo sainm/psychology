@@ -18,8 +18,8 @@ import java.util.List;
 /**
  * 用户业务接口
  *
- * @author Ray.Hao
- * @since 2022/1/14
+ * @author liu
+ * @since 2025/1/14
  */
 public interface UserService extends IService<User> {
 

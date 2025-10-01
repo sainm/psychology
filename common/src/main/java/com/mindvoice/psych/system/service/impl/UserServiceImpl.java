@@ -9,19 +9,30 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 
+import com.mindvoice.psych.common.constant.RedisConstants;
 import com.mindvoice.psych.common.constant.SystemConstants;
+import com.mindvoice.psych.common.exception.BusinessException;
+import com.mindvoice.psych.common.model.Option;
+import com.mindvoice.psych.core.security.model.UserAuthCredentials;
 import com.mindvoice.psych.core.security.service.PermissionService;
 import com.mindvoice.psych.core.security.token.TokenManager;
 import com.mindvoice.psych.core.security.util.SecurityUtils;
 import com.mindvoice.psych.shared.mail.service.MailService;
+import com.mindvoice.psych.shared.sms.enums.SmsTypeEnum;
 import com.mindvoice.psych.shared.sms.service.SmsService;
 import com.mindvoice.psych.system.converter.UserConverter;
+import com.mindvoice.psych.system.enums.DictCodeEnum;
 import com.mindvoice.psych.system.mapper.UserMapper;
 import com.mindvoice.psych.system.model.bo.UserBO;
+import com.mindvoice.psych.system.model.dto.CurrentUserDTO;
+import com.mindvoice.psych.system.model.dto.UserExportDTO;
+import com.mindvoice.psych.system.model.entity.DictItem;
 import com.mindvoice.psych.system.model.entity.User;
-import com.mindvoice.psych.system.model.form.UserForm;
+import com.mindvoice.psych.system.model.entity.UserRole;
+import com.mindvoice.psych.system.model.form.*;
 import com.mindvoice.psych.system.model.query.UserPageQuery;
 import com.mindvoice.psych.system.model.vo.UserPageVO;
+import com.mindvoice.psych.system.model.vo.UserProfileVO;
 import com.mindvoice.psych.system.service.DictItemService;
 import com.mindvoice.psych.system.service.RoleService;
 import com.mindvoice.psych.system.service.UserRoleService;
@@ -43,8 +54,8 @@ import java.util.stream.Collectors;
 /**
  * 用户业务实现类
  *
- * @author Ray.Hao
- * @since 2022/1/14
+ * @author liu
+ * @since 2025/1/14
  */
 @Service
 @RequiredArgsConstructor

@@ -1,14 +1,14 @@
 package com.mindvoice.psych.system.model.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.youlai.boot.common.base.BaseEntity;
+import com.mindvoice.psych.common.base.BaseEntity;
 import lombok.Getter;
 import lombok.Setter;
 
 /**
  * 角色实体
  *
- * @author Ray.Hao
+ * @author liu
  * @since 2024/6/23
  */
 @TableName("sys_role")

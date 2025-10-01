@@ -9,8 +9,8 @@ import java.time.LocalDateTime;
 /**
  * 用户分页视图对象
  *
- * @author haoxr
- * @since 2022/1/15 9:41
+ * @author liu
+ * @since 2025/1/15 9:41
  */
 @Schema(description ="用户分页对象")
 @Data

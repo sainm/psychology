@@ -8,7 +8,7 @@ import java.util.Map;
 /**
  * 短信服务接口层
  *
- * @author Ray.Hao
+ * @author liu
  * @since 2024/8/17
  */
 public interface SmsService {

@@ -1,14 +1,14 @@
-package com.youlai.boot.system.controller;
+package com.mindvoice.psych.system.controller;
 
-import com.youlai.boot.common.enums.LogModuleEnum;
-import com.youlai.boot.common.annotation.RepeatSubmit;
-import com.youlai.boot.common.model.Option;
-import com.youlai.boot.common.result.Result;
-import com.youlai.boot.system.model.form.DeptForm;
-import com.youlai.boot.system.model.query.DeptQuery;
-import com.youlai.boot.system.model.vo.DeptVO;
-import com.youlai.boot.common.annotation.Log;
-import com.youlai.boot.system.service.DeptService;
+import com.mindvoice.psych.common.enums.LogModuleEnum;
+import com.mindvoice.psych.common.annotation.RepeatSubmit;
+import com.mindvoice.psych.common.model.Option;
+import com.mindvoice.psych.common.result.Result;
+import com.mindvoice.psych.system.model.form.DeptForm;
+import com.mindvoice.psych.system.model.query.DeptQuery;
+import com.mindvoice.psych.system.model.vo.DeptVO;
+import com.mindvoice.psych.common.annotation.Log;
+import com.mindvoice.psych.system.service.DeptService;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.Operation;
@@ -22,7 +22,7 @@ import java.util.List;
 /**
  * 部门控制器
  *
- * @author Ray.Hao
+ * @author liu
  * @since 2020/11/6
  */
 @Tag(name = "05.部门接口")

@@ -6,7 +6,7 @@ import lombok.Getter;
 /**
  * 数据权限枚举
  *
- * @author Ray.Hao
+ * @author liu
  * @since 2.3.0
  */
 @Getter

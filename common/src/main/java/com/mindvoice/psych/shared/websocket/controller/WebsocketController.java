@@ -1,6 +1,6 @@
-package com.youlai.boot.shared.websocket.controller;
+package com.mindvoice.psych.shared.websocket.controller;
 
-import com.youlai.boot.shared.websocket.model.ChatMessage;
+import com.mindvoice.psych.shared.websocket.model.ChatMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
@@ -17,7 +17,7 @@ import java.security.Principal;
  * <p>
  * 包含点对点/广播发送消息
  *
- * @author Ray.Hao
+ * @author liu
  * @since 2.3.0
  */
 @RestController

@@ -8,8 +8,8 @@ import java.io.Serializable;
 /**
  * 统一响应结构体
  *
- * @author Ray
- * @since 2022/1/30
+ * @author liu
+ * @since 2025/1/30
  **/
 @Data
 public class Result<T> implements Serializable {

@@ -3,7 +3,7 @@ package com.mindvoice.psych.common.constant;
 /**
  * 系统常量
  *
- * @author Ray.Hao
+ * @author liu
  * @since 1.0.0
  */
 public interface SystemConstants {

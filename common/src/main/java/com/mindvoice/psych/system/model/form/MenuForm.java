@@ -1,6 +1,6 @@
 package com.mindvoice.psych.system.model.form;
 
-import com.youlai.boot.common.model.KeyValue;
+import com.mindvoice.psych.common.model.KeyValue;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import org.hibernate.validator.constraints.Range;
@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * 菜单表单对象
  *
- * @author Ray.Hao
+ * @author liu
  * @since 2024/06/23
  */
 @Schema(description = "菜单表单对象")

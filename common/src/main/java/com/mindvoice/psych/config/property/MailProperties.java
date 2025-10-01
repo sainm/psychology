@@ -6,7 +6,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 /**
  * 邮件配置类，用于接收和存储邮件相关的配置属性。
  *
- * @author Ray
+ * @author liu
  * @since 2024/8/17
  */
 @ConfigurationProperties(prefix = "spring.mail")

@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
  * WebSocket服务实现类
  * 统一处理WebSocket消息发送和用户在线状态管理
  *
- * @author Ray.Hao
+ * @author liu
  * @since 3.0.0
  */
 @Service

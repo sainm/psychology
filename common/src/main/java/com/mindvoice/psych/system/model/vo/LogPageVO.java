@@ -1,7 +1,7 @@
 package com.mindvoice.psych.system.model.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.youlai.boot.common.enums.LogModuleEnum;
+import com.mindvoice.psych.common.enums.LogModuleEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 /**
  * 系统日志分页VO
  *
- * @author Ray
+ * @author liu
  * @since 2.10.0
  */
 @Data

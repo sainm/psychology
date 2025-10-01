@@ -5,7 +5,7 @@ import org.springframework.security.core.AuthenticationException;
 /**
  * 验证码校验异常
  *
- * @author Ray.Hao
+ * @author liu
  * @since 2025/3/1
  */
 public class CaptchaValidationException extends AuthenticationException {

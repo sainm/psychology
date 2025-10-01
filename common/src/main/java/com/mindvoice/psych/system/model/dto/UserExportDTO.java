@@ -1,8 +1,9 @@
 package com.mindvoice.psych.system.model.dto;
 
-import cn.idev.excel.annotation.ExcelProperty;
-import cn.idev.excel.annotation.format.DateTimeFormat;
-import cn.idev.excel.annotation.write.style.ColumnWidth;
+
+import com.alibaba.excel.annotation.ExcelProperty;
+import com.alibaba.excel.annotation.format.DateTimeFormat;
+import com.alibaba.excel.annotation.write.style.ColumnWidth;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -10,8 +11,8 @@ import java.time.LocalDateTime;
 /**
  * 用户导出视图对象
  *
- * @author haoxr
- * @since 2022/4/11 8:46
+ * @author liu
+ * @since 2025/4/11 8:46
  */
 
 @Data

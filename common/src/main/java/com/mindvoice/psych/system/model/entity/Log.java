@@ -1,7 +1,7 @@
 package com.mindvoice.psych.system.model.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
-import com.youlai.boot.common.enums.LogModuleEnum;
+import com.mindvoice.psych.common.enums.LogModuleEnum;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 /**
  * 系统日志 实体类
  *
- * @author Ray.Hao
+ * @author liu
  * @since 2.10.0
  */
 @Data

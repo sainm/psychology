@@ -12,7 +12,7 @@ import java.io.Serializable;
 /**
  * 系统配置视图对象
  *
- * @author Theo
+ * @author liu
  * @since 2024-07-30 14:49
  */
 @Data

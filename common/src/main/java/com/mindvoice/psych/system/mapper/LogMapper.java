@@ -16,7 +16,7 @@ import java.util.List;
 /**
  * 系统日志数据访问层
  *
- * @author Ray
+ * @author liu
  * @since 2.10.0
  */
 @Mapper

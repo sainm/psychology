@@ -2,17 +2,17 @@ package com.mindvoice.psych.core.security.filter;
 
 import cn.hutool.captcha.generator.CodeGenerator;
 import cn.hutool.core.util.StrUtil;
-import com.youlai.boot.common.constant.RedisConstants;
-import com.youlai.boot.common.constant.SecurityConstants;
-import com.youlai.boot.common.result.ResultCode;
-import com.youlai.boot.common.util.ResponseUtils;
+import com.mindvoice.psych.common.constant.RedisConstants;
+import com.mindvoice.psych.common.constant.SecurityConstants;
+import com.mindvoice.psych.common.result.ResultCode;
+import com.mindvoice.psych.common.util.ResponseUtils;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.web.util.matcher.RegexRequestMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
@@ -21,12 +21,12 @@ import java.io.IOException;
 /**
  * 图形验证码校验过滤器
  *
- * @author haoxr
- * @since 2022/10/1
+ * @author liu
+ * @since 2025/10/1
  */
 public class CaptchaValidationFilter extends OncePerRequestFilter {
 
-    private static final AntPathRequestMatcher LOGIN_PATH_REQUEST_MATCHER = new AntPathRequestMatcher(SecurityConstants.LOGIN_PATH, HttpMethod.POST.name());
+    private static final RegexRequestMatcher LOGIN_PATH_REQUEST_MATCHER = new RegexRequestMatcher(SecurityConstants.LOGIN_PATH, HttpMethod.POST.name());
 
     public static final String CAPTCHA_CODE_PARAM_NAME = "captchaCode";
     public static final String CAPTCHA_KEY_PARAM_NAME = "captchaKey";
@@ -54,9 +54,7 @@ public class CaptchaValidationFilter extends OncePerRequestFilter {
             }
             // 缓存中的验证码
             String verifyCodeKey = request.getParameter(CAPTCHA_KEY_PARAM_NAME);
-            String cacheVerifyCode = (String) redisTemplate.opsForValue().get(
-                    StrUtil.format(RedisConstants.Captcha.IMAGE_CODE, verifyCodeKey)
-            );
+            String cacheVerifyCode = (String) redisTemplate.opsForValue().get(StrUtil.format(RedisConstants.Captcha.IMAGE_CODE, verifyCodeKey));
             if (cacheVerifyCode == null) {
                 ResponseUtils.writeErrMsg(response, ResultCode.USER_VERIFICATION_CODE_EXPIRED);
             } else {

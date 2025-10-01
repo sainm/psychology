@@ -1,5 +1,8 @@
 dependencies {
     implementation("com.baomidou:mybatis-plus-boot-starter:3.5.14")
+    implementation("com.baomidou:mybatis-plus-jsqlparser:3.5.14")
+    implementation("com.github.binarywang:wx-java-miniapp-spring-boot-starter:4.7.8-20250927.171143")
+    implementation("org.springframework.boot:spring-boot-starter-aop:3.5.6")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-data-redis:3.5.6")
     implementation("org.springframework.boot:spring-boot-starter-security:3.5.6")
@@ -10,4 +13,9 @@ dependencies {
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.13")
     implementation("io.minio:minio:8.6.0")
     implementation("org.mapstruct:mapstruct:1.6.3")
+    implementation("com.xuxueli:xxl-job-core:3.2.0")
+    implementation("org.springframework.boot:spring-boot-starter-mail:3.5.6")
+    implementation("org.redisson:redisson-spring-boot-starter:3.52.0")
+    implementation("org.lionsoul:ip2region:2.7.0")
+    implementation("com.github.ben-manes.caffeine:caffeine:3.2.2")
 }

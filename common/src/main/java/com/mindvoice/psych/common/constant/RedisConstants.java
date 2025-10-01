@@ -3,7 +3,7 @@ package com.mindvoice.psych.common.constant;
 /**
  * Redis 常量
  *
- * @author Theo
+ * @author liu
  * @since 2024-7-29 11:46:08
  */
 public interface RedisConstants {

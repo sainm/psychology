@@ -1,14 +1,14 @@
-package com.youlai.boot.system.controller;
+package com.mindvoice.psych.system.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.youlai.boot.common.enums.LogModuleEnum;
-import com.youlai.boot.common.result.PageResult;
-import com.youlai.boot.common.result.Result;
-import com.youlai.boot.common.annotation.Log;
-import com.youlai.boot.system.model.form.ConfigForm;
-import com.youlai.boot.system.model.query.ConfigPageQuery;
-import com.youlai.boot.system.model.vo.ConfigVO;
-import com.youlai.boot.system.service.ConfigService;
+import com.mindvoice.psych.common.enums.LogModuleEnum;
+import com.mindvoice.psych.common.result.PageResult;
+import com.mindvoice.psych.common.result.Result;
+import com.mindvoice.psych.common.annotation.Log;
+import com.mindvoice.psych.system.model.form.ConfigForm;
+import com.mindvoice.psych.system.model.query.ConfigPageQuery;
+import com.mindvoice.psych.system.model.vo.ConfigVO;
+import com.mindvoice.psych.system.service.ConfigService;
 import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +22,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 /**
  * 系统配置前端控制层
  *
- * @author Theo
+ * @author liu
  * @since 2024-07-30 11:25
  */
 @Slf4j

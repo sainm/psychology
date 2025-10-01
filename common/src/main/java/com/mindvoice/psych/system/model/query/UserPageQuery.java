@@ -2,6 +2,7 @@ package com.mindvoice.psych.system.model.query;
 
 import cn.hutool.db.sql.Direction;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.mindvoice.psych.common.annotation.ValidField;
 import com.mindvoice.psych.common.base.BasePageQuery;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -12,8 +13,8 @@ import java.util.List;
 /**
  * 用户分页查询对象
  *
- * @author haoxr
- * @since 2022/1/14
+ * @author liu
+ * @since 2025/1/14
  */
 @Data
 @EqualsAndHashCode(callSuper = false)

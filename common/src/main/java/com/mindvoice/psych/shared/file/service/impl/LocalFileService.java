@@ -5,7 +5,7 @@ import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.IdUtil;
 import com.mindvoice.psych.shared.file.model.FileInfo;
-import com.youlai.boot.shared.file.service.FileService;
+import com.mindvoice.psych.shared.file.service.FileService;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +22,7 @@ import java.time.LocalDateTime;
 /**
  * 本地存储服务类
  *
- * @author Theo
+ * @author liu
  * @since 2024-12-09 17:11
  */
 @Data
@@ -49,7 +49,7 @@ public class LocalFileService implements FileService {
         // 获取文件后缀
         String suffix = FileUtil.getSuffix(originalFilename);
         // 生成uuid
-        String fileName = IdUtil.simpleUUID()+ "." + suffix;;
+        String fileName = IdUtil.simpleUUID()+ "." + suffix;
         // 生成文件名(日期文件夹)
         String folder = DateUtil.format(LocalDateTime.now(), DatePattern.PURE_DATE_PATTERN);
         String filePrefix = storagePath.endsWith(File.separator) ? storagePath : storagePath + File.separator;

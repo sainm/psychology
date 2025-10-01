@@ -1,13 +1,13 @@
-package com.youlai.boot.core.aspect;
+package com.mindvoice.psych.core.aspect;
 
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.digest.DigestUtil;
-import com.youlai.boot.common.constant.RedisConstants;
-import com.youlai.boot.common.constant.SecurityConstants;
-import com.youlai.boot.common.result.ResultCode;
-import com.youlai.boot.common.exception.BusinessException;
-import com.youlai.boot.common.annotation.RepeatSubmit;
-import com.youlai.boot.common.util.IPUtils;
+import com.mindvoice.psych.common.constant.RedisConstants;
+import com.mindvoice.psych.common.constant.SecurityConstants;
+import com.mindvoice.psych.common.result.ResultCode;
+import com.mindvoice.psych.common.exception.BusinessException;
+import com.mindvoice.psych.common.annotation.RepeatSubmit;
+import com.mindvoice.psych.common.util.IPUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,7 +27,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * 防重复提交切面
  *
- * @author Ray.Hao
+ * @author liu
  * @since 2.3.0
  */
 @Aspect

@@ -1,8 +1,8 @@
-package com.youlai.boot.system.mapper;
+package com.mindvoice.psych.system.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.youlai.boot.system.model.bo.RolePermsBO;
-import com.youlai.boot.system.model.entity.RoleMenu;
+import com.mindvoice.psych.system.model.bo.RolePermsBO;
+import com.mindvoice.psych.system.model.entity.RoleMenu;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -11,8 +11,8 @@ import java.util.Set;
 /**
  * 角色菜单访问层
  *
- * @author haoxr
- * @since 2022/6/4
+ * @author liu
+ * @since 2025/6/4
  */
 @Mapper
 public interface RoleMenuMapper extends BaseMapper<RoleMenu> {

@@ -14,7 +14,7 @@ import java.util.List;
 /**
  * 字典项接口
  *
- * @author Ray Hao
+ * @author liu
  * @since 2023/3/4
  */
 public interface DictItemService extends IService<DictItem> {

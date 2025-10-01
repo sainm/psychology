@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
  * 用户和角色关联表
  *
  * @author Rya.Hao
- * @since 2022/12/17
+ * @since 2025/12/17
  */
 @TableName("sys_user_role")
 @Data

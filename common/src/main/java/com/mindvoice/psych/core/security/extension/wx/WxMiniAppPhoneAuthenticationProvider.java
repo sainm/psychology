@@ -5,9 +5,9 @@ import cn.binarywang.wx.miniapp.bean.WxMaJscode2SessionResult;
 import cn.binarywang.wx.miniapp.bean.WxMaPhoneNumberInfo;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
-import com.youlai.boot.core.security.model.SysUserDetails;
-import com.youlai.boot.core.security.model.UserAuthCredentials;
-import com.youlai.boot.system.service.UserService;
+import com.mindvoice.psych.core.security.model.SysUserDetails;
+import com.mindvoice.psych.core.security.model.UserAuthCredentials;
+import com.mindvoice.psych.system.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import me.chanjar.weixin.common.error.WxErrorException;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -20,7 +20,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 /**
  * 微信小程序手机号认证Provider
  *
- * @author 有来技术团队
+ * @author liu
  * @since 2.0.0
  */
 @Slf4j

@@ -11,7 +11,7 @@ import java.io.Serializable;
 /**
  * 系统配置 表单实体
  *
- * @author Theo
+ * @author liu
  * @since 2024-07-29 11:17:26
  */
 @Data

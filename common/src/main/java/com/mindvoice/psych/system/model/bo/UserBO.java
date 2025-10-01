@@ -7,8 +7,8 @@ import java.time.LocalDateTime;
 /**
  * 用户持久化对象
  *
- * @author haoxr
- * @since 2022/6/10
+ * @author liu
+ * @since 2025/6/10
  */
 @Data
 public class UserBO {

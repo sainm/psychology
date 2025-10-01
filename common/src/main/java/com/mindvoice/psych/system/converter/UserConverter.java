@@ -2,14 +2,17 @@ package com.mindvoice.psych.system.converter;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
+import com.mindvoice.psych.common.model.Option;
 import com.mindvoice.psych.system.model.bo.UserBO;
 import com.mindvoice.psych.system.model.entity.User;
 import com.mindvoice.psych.system.model.form.UserForm;
+import com.mindvoice.psych.system.model.form.UserProfileForm;
 import com.mindvoice.psych.system.model.vo.UserPageVO;
-import com.youlai.boot.system.model.dto.CurrentUserDTO;
+import com.mindvoice.psych.system.model.dto.CurrentUserDTO;
 
-import com.youlai.boot.system.model.dto.UserImportDTO;
+import com.mindvoice.psych.system.model.dto.UserImportDTO;
 
+import com.mindvoice.psych.system.model.vo.UserProfileVO;
 import org.mapstruct.InheritInverseConfiguration;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -20,8 +23,8 @@ import java.util.List;
 /**
  * 用户对象转换器
  *
- * @author Ray.Hao
- * @since 2022/6/8
+ * @author liu
+ * @since 2025/6/8
  */
 @Mapper(componentModel = "spring")
 public interface UserConverter {

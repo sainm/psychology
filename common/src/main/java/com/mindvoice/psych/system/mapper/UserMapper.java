@@ -17,8 +17,8 @@ import java.util.List;
 /**
  * 用户持久层接口
  *
- * @author Ray.Hao
- * @since 2022/1/14
+ * @author liu
+ * @since 2025/1/14
  */
 @Mapper
 public interface UserMapper extends BaseMapper<User> {

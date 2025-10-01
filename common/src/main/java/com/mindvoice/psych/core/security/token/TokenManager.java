@@ -9,7 +9,7 @@ import org.springframework.security.core.Authentication;
  *  <p>
  *  用于生成、解析、校验、刷新 Token
  *
- * @author Ray.Hao
+ * @author liu
  * @since 2.16.0
  */
 public interface TokenManager {
@@ -20,7 +20,7 @@ public interface TokenManager {
      * @param authentication 用户认证信息
      * @return 认证 Token 响应
      */
-    AuthenticationToken generateToken(Authentication authentication);
+    AuthenticationToken  generateToken(Authentication authentication);
 
     /**
      * 解析 Token 获取认证信息

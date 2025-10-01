@@ -8,8 +8,8 @@ import com.aliyun.oss.OSS;
 import com.aliyun.oss.OSSClientBuilder;
 import com.aliyun.oss.model.ObjectMetadata;
 import com.aliyun.oss.model.PutObjectRequest;
-import com.youlai.boot.shared.file.service.FileService;
-import com.youlai.boot.shared.file.model.FileInfo;
+import com.mindvoice.psych.shared.file.service.FileService;
+import com.mindvoice.psych.shared.file.model.FileInfo;
 import jakarta.annotation.PostConstruct;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +25,7 @@ import java.time.LocalDateTime;
 /**
  * Aliyun 对象存储服务类
  *
- * @author haoxr
+ * @author liu
  * @since 2.3.0
  */
 @Component

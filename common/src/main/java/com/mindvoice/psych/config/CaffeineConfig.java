@@ -1,15 +1,17 @@
 package com.mindvoice.psych.config;
 
+import com.github.benmanes.caffeine.cache.Caffeine;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.CacheManager;
+import org.springframework.cache.caffeine.CaffeineCacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
  * caffeine缓存配置
  *
- * @author Theo
+ * @author liu
  * @since 2025-01-22 17:40:23
  */
 @Slf4j

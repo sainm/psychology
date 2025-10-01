@@ -7,8 +7,8 @@ import org.slf4j.helpers.MessageFormatter;
 /**
  * 自定义业务异常
  *
- * @author Ray
- * @since 2022/7/31
+ * @author liu
+ * @since 2025/7/31
  */
 @Getter
 public class BusinessException extends RuntimeException {

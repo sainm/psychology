@@ -7,20 +7,22 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.youlai.boot.common.exception.BusinessException;
-import com.youlai.boot.system.converter.RoleConverter;
-import com.youlai.boot.system.mapper.RoleMapper;
-import com.youlai.boot.system.model.entity.Role;
-import com.youlai.boot.system.model.entity.RoleMenu;
-import com.youlai.boot.system.model.form.RoleForm;
-import com.youlai.boot.system.model.query.RolePageQuery;
-import com.youlai.boot.system.model.vo.RolePageVO;
-import com.youlai.boot.common.constant.SystemConstants;
-import com.youlai.boot.common.model.Option;
-import com.youlai.boot.core.security.util.SecurityUtils;
-import com.youlai.boot.system.service.RoleMenuService;
-import com.youlai.boot.system.service.RoleService;
-import com.youlai.boot.system.service.UserRoleService;
+
+
+import com.mindvoice.psych.common.constant.SystemConstants;
+import com.mindvoice.psych.common.exception.BusinessException;
+import com.mindvoice.psych.common.model.Option;
+import com.mindvoice.psych.core.security.util.SecurityUtils;
+import com.mindvoice.psych.system.converter.RoleConverter;
+import com.mindvoice.psych.system.mapper.RoleMapper;
+import com.mindvoice.psych.system.model.entity.Role;
+import com.mindvoice.psych.system.model.entity.RoleMenu;
+import com.mindvoice.psych.system.model.form.RoleForm;
+import com.mindvoice.psych.system.model.query.RolePageQuery;
+import com.mindvoice.psych.system.model.vo.RolePageVO;
+import com.mindvoice.psych.system.service.RoleMenuService;
+import com.mindvoice.psych.system.service.RoleService;
+import com.mindvoice.psych.system.service.UserRoleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
@@ -33,8 +35,8 @@ import java.util.Set;
 /**
  * 角色业务实现类
  *
- * @author haoxr
- * @since 2022/6/3
+ * @author liu
+ * @since 2025/6/3
  */
 @Service
 @RequiredArgsConstructor
@@ -58,17 +60,8 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
         String keywords = queryParams.getKeywords();
 
         // 查询数据
-        Page<Role> rolePage = this.page(new Page<>(pageNum, pageSize),
-                new LambdaQueryWrapper<Role>()
-                        .and(StrUtil.isNotBlank(keywords),
-                                wrapper ->
-                                        wrapper.like(Role::getName, keywords)
-                                                .or()
-                                                .like(Role::getCode, keywords)
-                        )
-                        .ne(!SecurityUtils.isRoot(), Role::getCode, SystemConstants.ROOT_ROLE_CODE) // 非超级管理员不显示超级管理员角色
-                        .orderByAsc(Role::getSort).orderByDesc(Role::getCreateTime).orderByDesc(Role::getUpdateTime)
-        );
+        Page<Role> rolePage = this.page(new Page<>(pageNum, pageSize), new LambdaQueryWrapper<Role>().and(StrUtil.isNotBlank(keywords), wrapper -> wrapper.like(Role::getName, keywords).or().like(Role::getCode, keywords)).ne(!SecurityUtils.isRoot(), Role::getCode, SystemConstants.ROOT_ROLE_CODE) // 非超级管理员不显示超级管理员角色
+                .orderByAsc(Role::getSort).orderByDesc(Role::getCreateTime).orderByDesc(Role::getUpdateTime));
 
         // 实体转换
         return roleConverter.toPageVo(rolePage);
@@ -82,11 +75,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
     @Override
     public List<Option<Long>> listRoleOptions() {
         // 查询数据
-        List<Role> roleList = this.list(new LambdaQueryWrapper<Role>()
-                .ne(!SecurityUtils.isRoot(), Role::getCode, SystemConstants.ROOT_ROLE_CODE)
-                .select(Role::getId, Role::getName)
-                .orderByAsc(Role::getSort)
-        );
+        List<Role> roleList = this.list(new LambdaQueryWrapper<Role>().ne(!SecurityUtils.isRoot(), Role::getCode, SystemConstants.ROOT_ROLE_CODE).select(Role::getId, Role::getName).orderByAsc(Role::getSort));
 
         // 实体转换
         return roleConverter.toOptions(roleList);
@@ -111,11 +100,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
         }
 
         String roleCode = roleForm.getCode();
-        long count = this.count(new LambdaQueryWrapper<Role>()
-                .ne(roleId != null, Role::getId, roleId)
-                .and(wrapper ->
-                        wrapper.eq(Role::getCode, roleCode).or().eq(Role::getName, roleForm.getName())
-                ));
+        long count = this.count(new LambdaQueryWrapper<Role>().ne(roleId != null, Role::getId, roleId).and(wrapper -> wrapper.eq(Role::getCode, roleCode).or().eq(Role::getName, roleForm.getName())));
         Assert.isTrue(count == 0, "角色名称或角色编码已存在，请修改后重试！");
 
         // 实体转换
@@ -124,11 +109,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
         boolean result = this.saveOrUpdate(role);
         if (result) {
             // 判断角色编码或状态是否修改，修改了则刷新权限缓存
-            if (oldRole != null
-                    && (
-                    !StrUtil.equals(oldRole.getCode(), roleCode) ||
-                            !ObjectUtil.equals(oldRole.getStatus(), roleForm.getStatus())
-            )) {
+            if (oldRole != null && (!StrUtil.equals(oldRole.getCode(), roleCode) || !ObjectUtil.equals(oldRole.getStatus(), roleForm.getStatus()))) {
                 roleMenuService.refreshRolePermsCache(oldRole.getCode(), roleCode);
             }
         }
@@ -179,9 +160,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
     @Override
     public void deleteRoles(String ids) {
         Assert.isTrue(StrUtil.isNotBlank(ids), "删除的角色ID不能为空");
-        List<Long> roleIds = Arrays.stream(ids.split(","))
-                .map(Long::parseLong)
-                .toList();
+        List<Long> roleIds = Arrays.stream(ids.split(",")).map(Long::parseLong).toList();
 
         for (Long roleId : roleIds) {
             Role role = this.getById(roleId);
@@ -225,16 +204,10 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
             throw new RuntimeException("角色不存在");
         }
         // 删除角色菜单
-        roleMenuService.remove(
-                new LambdaQueryWrapper<RoleMenu>()
-                        .eq(RoleMenu::getRoleId, roleId)
-        );
+        roleMenuService.remove(new LambdaQueryWrapper<RoleMenu>().eq(RoleMenu::getRoleId, roleId));
         // 新增角色菜单
         if (CollectionUtil.isNotEmpty(menuIds)) {
-            List<RoleMenu> roleMenus = menuIds
-                    .stream()
-                    .map(menuId -> new RoleMenu(roleId, menuId))
-                    .toList();
+            List<RoleMenu> roleMenus = menuIds.stream().map(menuId -> new RoleMenu(roleId, menuId)).toList();
             roleMenuService.saveBatch(roleMenus);
         }
 

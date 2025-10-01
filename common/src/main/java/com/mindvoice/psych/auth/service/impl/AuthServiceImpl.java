@@ -20,8 +20,8 @@ import com.mindvoice.psych.core.security.extension.wx.WxMiniAppPhoneAuthenticati
 import com.mindvoice.psych.core.security.model.AuthenticationToken;
 import com.mindvoice.psych.core.security.token.TokenManager;
 import com.mindvoice.psych.core.security.util.SecurityUtils;
-import com.youlai.boot.shared.sms.enums.SmsTypeEnum;
-import com.youlai.boot.shared.sms.service.SmsService;
+import com.mindvoice.psych.shared.sms.enums.SmsTypeEnum;
+import com.mindvoice.psych.shared.sms.service.SmsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -39,7 +39,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * 认证服务实现类
  *
- * @author Ray.Hao
+ * @author liu
  * @since 2.4.0
  */
 @Service

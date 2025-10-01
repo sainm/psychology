@@ -12,8 +12,10 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import com.mindvoice.psych.common.constant.SystemConstants;
+import com.mindvoice.psych.common.enums.StatusEnum;
 import com.mindvoice.psych.common.model.KeyValue;
 import com.mindvoice.psych.common.model.Option;
+import com.mindvoice.psych.core.security.util.SecurityUtils;
 import com.mindvoice.psych.system.converter.MenuConverter;
 import com.mindvoice.psych.system.enums.MenuTypeEnum;
 import com.mindvoice.psych.system.mapper.MenuMapper;
@@ -35,7 +37,7 @@ import java.util.stream.Collectors;
 /**
  * 菜单服务实现类
  *
- * @author Ray.Hao
+ * @author liu
  * @since 2020/11/06
  */
 @Service
@@ -413,71 +415,71 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
 
     }
 
-    /**
-     * 代码生成时添加菜单
-     *
-     * @param parentMenuId 父菜单ID
-     * @param genConfig    实体名称
-     */
-    @Override
-    public void addMenuForCodegen(Long parentMenuId, GenConfig genConfig) {
-        Menu parentMenu = this.getById(parentMenuId);
-        Assert.notNull(parentMenu, "上级菜单不存在");
-
-        String entityName = genConfig.getEntityName();
-
-        long count = this.count(new LambdaQueryWrapper<Menu>().eq(Menu::getRouteName, entityName));
-        if (count > 0) {
-            return;
-        }
-
-        // 获取父级菜单子菜单最带的排序
-        Menu maxSortMenu = this.getOne(new LambdaQueryWrapper<Menu>().eq(Menu::getParentId, parentMenuId)
-                .orderByDesc(Menu::getSort)
-                .last("limit 1")
-        );
-        int sort = 1;
-        if (maxSortMenu != null) {
-            sort = maxSortMenu.getSort() + 1;
-        }
-
-        Menu menu = new Menu();
-        menu.setParentId(parentMenuId);
-        menu.setName(genConfig.getBusinessName());
-
-        menu.setRouteName(entityName);
-        menu.setRoutePath(StrUtil.toSymbolCase(entityName, '-'));
-        menu.setComponent(genConfig.getModuleName() + "/" + StrUtil.toSymbolCase(entityName, '-') + "/index");
-        menu.setType(MenuTypeEnum.MENU.getValue());
-        menu.setSort(sort);
-        menu.setVisible(1);
-        boolean result = this.save(menu);
-
-        if (result) {
-            // 生成treePath
-            String treePath = generateMenuTreePath(parentMenuId);
-            menu.setTreePath(treePath);
-            this.updateById(menu);
-
-            // 生成CURD按钮权限
-            String permPrefix = genConfig.getModuleName() + ":" + genConfig.getTableName().replace("_", "-") + ":";
-            String[] actions = {"查询", "新增", "编辑", "删除"};
-            String[] perms = {"query", "add", "edit", "delete"};
-
-            for (int i = 0; i < actions.length; i++) {
-                Menu button = new Menu();
-                button.setParentId(menu.getId());
-                button.setType(MenuTypeEnum.BUTTON.getValue());
-                button.setName(actions[i]);
-                button.setPerm(permPrefix + perms[i]);
-                button.setSort(i + 1);
-                this.save(button);
-
-                // 生成treePath
-                button.setTreePath(treePath + "," + button.getId());
-                this.updateById(button);
-            }
-        }
-    }
+//    /**
+//     * 代码生成时添加菜单
+//     *
+//     * @param parentMenuId 父菜单ID
+//     * @param genConfig    实体名称
+//     */
+//    @Override
+//    public void addMenuForCodegen(Long parentMenuId, GenConfig genConfig) {
+//        Menu parentMenu = this.getById(parentMenuId);
+//        Assert.notNull(parentMenu, "上级菜单不存在");
+//
+//        String entityName = genConfig.getEntityName();
+//
+//        long count = this.count(new LambdaQueryWrapper<Menu>().eq(Menu::getRouteName, entityName));
+//        if (count > 0) {
+//            return;
+//        }
+//
+//        // 获取父级菜单子菜单最带的排序
+//        Menu maxSortMenu = this.getOne(new LambdaQueryWrapper<Menu>().eq(Menu::getParentId, parentMenuId)
+//                .orderByDesc(Menu::getSort)
+//                .last("limit 1")
+//        );
+//        int sort = 1;
+//        if (maxSortMenu != null) {
+//            sort = maxSortMenu.getSort() + 1;
+//        }
+//
+//        Menu menu = new Menu();
+//        menu.setParentId(parentMenuId);
+//        menu.setName(genConfig.getBusinessName());
+//
+//        menu.setRouteName(entityName);
+//        menu.setRoutePath(StrUtil.toSymbolCase(entityName, '-'));
+//        menu.setComponent(genConfig.getModuleName() + "/" + StrUtil.toSymbolCase(entityName, '-') + "/index");
+//        menu.setType(MenuTypeEnum.MENU.getValue());
+//        menu.setSort(sort);
+//        menu.setVisible(1);
+//        boolean result = this.save(menu);
+//
+//        if (result) {
+//            // 生成treePath
+//            String treePath = generateMenuTreePath(parentMenuId);
+//            menu.setTreePath(treePath);
+//            this.updateById(menu);
+//
+//            // 生成CURD按钮权限
+//            String permPrefix = genConfig.getModuleName() + ":" + genConfig.getTableName().replace("_", "-") + ":";
+//            String[] actions = {"查询", "新增", "编辑", "删除"};
+//            String[] perms = {"query", "add", "edit", "delete"};
+//
+//            for (int i = 0; i < actions.length; i++) {
+//                Menu button = new Menu();
+//                button.setParentId(menu.getId());
+//                button.setType(MenuTypeEnum.BUTTON.getValue());
+//                button.setName(actions[i]);
+//                button.setPerm(permPrefix + perms[i]);
+//                button.setSort(i + 1);
+//                this.save(button);
+//
+//                // 生成treePath
+//                button.setTreePath(treePath + "," + button.getId());
+//                this.updateById(button);
+//            }
+//        }
+//    }
 
 }

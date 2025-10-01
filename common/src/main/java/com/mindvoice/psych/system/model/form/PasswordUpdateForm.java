@@ -6,7 +6,7 @@ import lombok.Data;
 /**
  * 修改密码表单
  *
- * @author Ray.Hao
+ * @author liu
  * @since 2024/8/13
  */
 @Schema(description = "修改密码表单")

@@ -2,7 +2,7 @@ package com.mindvoice.psych.core.security.model;
 
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ObjectUtil;
-import com.youlai.boot.common.constant.SecurityConstants;
+import com.mindvoice.psych.common.constant.SecurityConstants;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
  * 封装了用户的基本信息和权限信息，供 Spring Security 进行用户认证与授权。
  * 实现了 {@link UserDetails} 接口，提供用户的核心信息。
  *
- * @author Ray.Hao
+ * @author liu
  * @version 3.0.0
  */
 @Data

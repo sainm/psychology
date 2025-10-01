@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
  * 用户在线状态服务
  * 负责维护用户的在线状态和相关统计
  *
- * @author Ray.Hao
+ * @author liu
  * @since 3.0.0
  */
 @Service

@@ -8,11 +8,11 @@ import cn.hutool.http.useragent.UserAgent;
 import cn.hutool.http.useragent.UserAgentUtil;
 import cn.hutool.json.JSONUtil;
 import com.aliyun.oss.HttpMethod;
-import com.youlai.boot.common.enums.LogModuleEnum;
-import com.youlai.boot.common.util.IPUtils;
-import com.youlai.boot.core.security.util.SecurityUtils;
-import com.youlai.boot.system.model.entity.Log;
-import com.youlai.boot.system.service.LogService;
+import com.mindvoice.psych.common.enums.LogModuleEnum;
+import com.mindvoice.psych.common.util.IPUtils;
+import com.mindvoice.psych.core.security.util.SecurityUtils;
+import com.mindvoice.psych.system.model.entity.Log;
+import com.mindvoice.psych.system.service.LogService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -34,7 +34,7 @@ import java.util.Objects;
 /**
  * 日志切面
  *
- * @author Ray.Hao
+ * @author liu
  * @since 2024/6/25
  */
 @Slf4j
@@ -49,7 +49,7 @@ public class LogAspect {
     /**
      * 切点
      */
-    @Pointcut("@annotation(com.youlai.boot.common.annotation.Log)")
+    @Pointcut("@annotation(com.mindvoice.psych.common.annotation.Log)")
     public void logPointcut() {
     }
 
@@ -59,7 +59,7 @@ public class LogAspect {
      * @param joinPoint 切点
      */
     @Around("logPointcut() && @annotation(logAnnotation)")
-    public Object doAround(ProceedingJoinPoint joinPoint, com.youlai.boot.common.annotation.Log logAnnotation) throws Throwable {
+    public Object doAround(ProceedingJoinPoint joinPoint, com.mindvoice.psych.common.annotation.Log logAnnotation) throws Throwable {
         // 在方法执行前获取用户ID，避免在方法执行过程中清除上下文导致获取不到用户ID
         Long userId = SecurityUtils.getUserId();
         
@@ -89,7 +89,7 @@ public class LogAspect {
      * @param logAnnotation 日志注解
      * @param userId        用户ID
      */
-    private void saveLog(final JoinPoint joinPoint, final Exception e, Object jsonResult, com.youlai.boot.common.annotation.Log logAnnotation, long executionTime, Long userId) {
+    private void saveLog(final JoinPoint joinPoint, final Exception e, Object jsonResult, com.mindvoice.psych.common.annotation.Log logAnnotation, long executionTime, Long userId) {
         String requestURI = request.getRequestURI();
         // 创建日志记录
         Log log = new Log();

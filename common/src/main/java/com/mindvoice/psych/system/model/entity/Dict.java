@@ -8,8 +8,8 @@ import lombok.EqualsAndHashCode;
 /**
  * 字典实体
  *
- * @author Ray.Hao
- * @since 2022/12/17
+ * @author liu
+ * @since 2025/12/17
  */
 @EqualsAndHashCode(callSuper = false)
 @TableName("sys_dict")

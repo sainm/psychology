@@ -1,6 +1,6 @@
 package com.mindvoice.psych.system.model.query;
 
-import com.youlai.boot.common.base.BasePageQuery;
+import com.mindvoice.psych.common.base.BasePageQuery;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * 通知公告分页查询对象
  *
- * @author youlaitech
+ * @author liu
  * @since 2024-08-27 10:31
  */
 @Data

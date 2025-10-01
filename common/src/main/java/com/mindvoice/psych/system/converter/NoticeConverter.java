@@ -1,11 +1,11 @@
 package com.mindvoice.psych.system.converter;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.youlai.boot.system.model.bo.NoticeBO;
-import com.youlai.boot.system.model.entity.Notice;
-import com.youlai.boot.system.model.form.NoticeForm;
-import com.youlai.boot.system.model.vo.NoticeDetailVO;
-import com.youlai.boot.system.model.vo.NoticePageVO;
+import com.mindvoice.psych.system.model.bo.NoticeBO;
+import com.mindvoice.psych.system.model.entity.Notice;
+import com.mindvoice.psych.system.model.form.NoticeForm;
+import com.mindvoice.psych.system.model.vo.NoticeDetailVO;
+import com.mindvoice.psych.system.model.vo.NoticePageVO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
@@ -13,7 +13,7 @@ import org.mapstruct.Mappings;
 /**
  * 通知公告对象转换器
  *
- * @author youlaitech
+ * @author liu
  * @since 2024-08-27 10:31
  */
 @Mapper(componentModel = "spring")

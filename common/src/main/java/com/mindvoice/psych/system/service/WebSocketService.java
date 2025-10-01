@@ -9,7 +9,7 @@ package com.mindvoice.psych.system.service;
  * - 系统消息推送
  * </p>
  *
- * @author Ray.Hao
+ * @author liu
  * @since 3.0.0
  */
 public interface WebSocketService {

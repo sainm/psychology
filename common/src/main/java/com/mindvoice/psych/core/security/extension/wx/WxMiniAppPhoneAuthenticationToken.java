@@ -9,7 +9,7 @@ import java.util.Collection;
 /**
  * 微信小程序手机号认证Token
  *
- * @author 有来技术团队
+ * @author liu
  * @since 2.0.0
  */
 public class WxMiniAppPhoneAuthenticationToken extends AbstractAuthenticationToken {

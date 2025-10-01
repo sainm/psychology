@@ -9,7 +9,7 @@ import java.util.Date;
 /**
  * 个人中心用户信息
  *
- * @author Ray
+ * @author liu
  * @since 2024/8/13
  */
 @Schema(description = "个人中心用户信息")

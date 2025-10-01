@@ -4,13 +4,13 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.youlai.boot.core.security.util.SecurityUtils;
-import com.youlai.boot.system.mapper.UserNoticeMapper;
-import com.youlai.boot.system.model.entity.UserNotice;
-import com.youlai.boot.system.model.query.NoticePageQuery;
-import com.youlai.boot.system.model.vo.NoticePageVO;
-import com.youlai.boot.system.model.vo.UserNoticePageVO;
-import com.youlai.boot.system.service.UserNoticeService;
+import com.mindvoice.psych.core.security.util.SecurityUtils;
+import com.mindvoice.psych.system.mapper.UserNoticeMapper;
+import com.mindvoice.psych.system.model.entity.UserNotice;
+import com.mindvoice.psych.system.model.query.NoticePageQuery;
+import com.mindvoice.psych.system.model.vo.NoticePageVO;
+import com.mindvoice.psych.system.model.vo.UserNoticePageVO;
+import com.mindvoice.psych.system.service.UserNoticeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +19,7 @@ import java.util.List;
 /**
  * 用户公告状态服务实现类
  *
- * @author youlaitech
+ * @author liu
  * @since 2024-08-28 16:56
  */
 @Service

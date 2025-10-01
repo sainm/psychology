@@ -10,7 +10,7 @@ import org.mapstruct.Mapper;
 /**
  * 系统配置对象转换器
  *
- * @author Theo
+ * @author liu
  * @since 2024-7-29 11:42:49
  */
 @Mapper(componentModel = "spring")

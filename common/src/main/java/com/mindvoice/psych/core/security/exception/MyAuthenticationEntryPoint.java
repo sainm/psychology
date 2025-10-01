@@ -1,7 +1,7 @@
 package com.mindvoice.psych.core.security.exception;
 
-import com.youlai.boot.common.result.ResultCode;
-import com.youlai.boot.common.util.ResponseUtils;
+import com.mindvoice.psych.common.result.ResultCode;
+import com.mindvoice.psych.common.util.ResponseUtils;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.security.core.AuthenticationException;
@@ -16,7 +16,7 @@ import java.io.IOException;
 /**
  * 统一处理 Spring Security 认证失败响应
  *
- * @author Ray.Hao
+ * @author liu
  * @since 2.0.0
  */
 public class MyAuthenticationEntryPoint implements AuthenticationEntryPoint {

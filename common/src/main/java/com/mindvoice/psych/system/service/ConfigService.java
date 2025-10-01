@@ -10,7 +10,7 @@ import com.mindvoice.psych.system.model.vo.ConfigVO;
 /**
  * 系统配置Service接口
  *
- * @author Theo
+ * @author liu
  * @since 2024-07-29 11:17:26
  */
 public interface ConfigService extends IService<Config> {
