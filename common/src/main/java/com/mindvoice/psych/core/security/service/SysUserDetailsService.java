@@ -2,7 +2,6 @@ package com.mindvoice.psych.core.security.service;
 
 import com.mindvoice.psych.core.security.model.SysUserDetails;
 import com.mindvoice.psych.core.security.model.UserAuthCredentials;
-import com.mindvoice.psych.system.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;

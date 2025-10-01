@@ -11,8 +11,7 @@ import com.aliyun.oss.HttpMethod;
 import com.mindvoice.psych.common.enums.LogModuleEnum;
 import com.mindvoice.psych.common.util.IPUtils;
 import com.mindvoice.psych.core.security.util.SecurityUtils;
-import com.mindvoice.psych.system.model.entity.Log;
-import com.mindvoice.psych.system.service.LogService;
+
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;

@@ -3,7 +3,6 @@ package com.mindvoice.psych.config;
 import cn.hutool.core.util.StrUtil;
 import com.mindvoice.psych.core.security.model.SysUserDetails;
 import com.mindvoice.psych.core.security.token.TokenManager;
-import com.mindvoice.psych.system.service.WebSocketService;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.context.annotation.Configuration;

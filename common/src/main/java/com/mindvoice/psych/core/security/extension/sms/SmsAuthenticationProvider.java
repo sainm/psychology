@@ -7,7 +7,6 @@ import com.mindvoice.psych.common.constant.RedisConstants;
 import com.mindvoice.psych.core.security.exception.CaptchaValidationException;
 import com.mindvoice.psych.core.security.model.SysUserDetails;
 import com.mindvoice.psych.core.security.model.UserAuthCredentials;
-import com.mindvoice.psych.system.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.AuthenticationProvider;

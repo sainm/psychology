@@ -5,4 +5,3 @@ include("server") //启动模块（Spring Boot Application）
 include("api") //服务接口（Service Interfaces）数据传输对象（DTOs）枚举和常量
 include("core")//实现业务逻辑
 include("web") //Web 层（页面访问、前后端接口）
-include("system")
