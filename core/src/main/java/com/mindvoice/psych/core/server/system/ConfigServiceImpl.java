@@ -1,16 +1,19 @@
 package com.mindvoice.psych.core.server.system;
 
-
-
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
 import com.mindvoice.psych.common.constant.RedisConstants;
+import com.mindvoice.psych.common.util.BeanUtils;
 import com.mindvoice.psych.core.security.util.SecurityUtils;
-import com.mindvoice.psych.system.converter.ConfigConverter;
-import com.mindvoice.psych.system.model.entity.Config;
+import com.mindvoice.psych.system.entity.Config;
+import com.mindvoice.psych.system.mapper.ConfigMapper;
 import com.mindvoice.psych.system.model.form.ConfigForm;
 import com.mindvoice.psych.system.service.ConfigService;
+import io.micrometer.common.util.StringUtils;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
@@ -29,9 +32,10 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ConfigServiceImpl implements ConfigService {
 
-    private final ConfigConverter configConverter;
 
     private final RedisTemplate<String, Object> redisTemplate;
+
+    private final ConfigMapper configMapper;
 
     /**
      * 系统启动完成后，加载系统配置到缓存
@@ -47,7 +51,6 @@ public class ConfigServiceImpl implements ConfigService {
 //     * @param configPageQuery 查询参数
 //     * @return 系统配置分页列表
 //     */
-//    @Override
 //    public IPage<ConfigVO> page(ConfigPageQuery configPageQuery) {
 //        Page<Config> page = new Page<>(configPageQuery.getPageNum(), configPageQuery.getPageSize());
 //        String keywords = configPageQuery.getKeywords();
@@ -57,7 +60,8 @@ public class ConfigServiceImpl implements ConfigService {
 //                        .or()
 //                        .like(Config::getConfigName, keywords)
 //                );
-//        Page<Config> pageList = this.page(page, query);
+//        Page<Config> pageList = configMapper.selectPage(page, query);
+//        IPage<ConfigVO> page1 = BeanUtils.toBean(pageList, ConfigVO.class);
 //        return configConverter.toPageVo(pageList);
 //    }
 
@@ -69,11 +73,11 @@ public class ConfigServiceImpl implements ConfigService {
      */
     @Override
     public boolean save(ConfigForm configForm) {
-        Assert.isTrue( super.count(new LambdaQueryWrapper<Config>().eq(Config::getConfigKey, configForm.getConfigKey())) == 0,  "配置键已存在");
-        Config config = configConverter.toEntity(configForm);
+        Assert.isTrue(configMapper.selectCount(new LambdaQueryWrapper<Config>().eq(Config::getConfigKey, configForm.getConfigKey())) == 0, "配置键已存在");
+        Config config = BeanUtils.toBean(configForm, Config.class);
         config.setCreateBy(SecurityUtils.getUserId());
         config.setIsDeleted(0);
-        return this.save(config);
+        return SqlHelper.retBool(configMapper.insert(config));
     }
 
     /**
@@ -84,8 +88,8 @@ public class ConfigServiceImpl implements ConfigService {
      */
     @Override
     public ConfigForm getConfigFormData(Long id) {
-        Config entity = this.getById(id);
-        return configConverter.toForm(entity);
+        Config entity = configMapper.selectById(id);
+        return BeanUtils.toBean(entity, ConfigForm.class);
     }
 
     /**
@@ -97,12 +101,10 @@ public class ConfigServiceImpl implements ConfigService {
      */
     @Override
     public boolean edit(Long id, ConfigForm configForm) {
-        Assert.isTrue(
-                super.count(new LambdaQueryWrapper<Config>().eq(Config::getConfigKey, configForm.getConfigKey()).ne(Config::getId, id)) == 0,
-                "配置键已存在");
-        Config config = configConverter.toEntity(configForm);
+        Assert.isTrue(configMapper.selectCount(new LambdaQueryWrapper<Config>().eq(Config::getConfigKey, configForm.getConfigKey()).ne(Config::getId, id)) == 0, "配置键已存在");
+        Config config = BeanUtils.toBean(configForm, Config.class);
         config.setUpdateBy(SecurityUtils.getUserId());
-        return this.updateById(config);
+        return SqlHelper.retBool(configMapper.updateById(config));
     }
 
     /**
@@ -114,11 +116,7 @@ public class ConfigServiceImpl implements ConfigService {
     @Override
     public boolean delete(Long id) {
         if (id != null) {
-            return super.update(new LambdaUpdateWrapper<Config>()
-                    .eq(Config::getId,id)
-                    .set(Config::getIsDeleted, 1)
-                    .set(Config::getUpdateBy, SecurityUtils.getUserId())
-            );
+            return SqlHelper.retBool(configMapper.update(new LambdaUpdateWrapper<Config>().eq(Config::getId, id).set(Config::getIsDeleted, 1).set(Config::getUpdateBy, SecurityUtils.getUserId())));
         }
         return false;
     }
@@ -131,7 +129,7 @@ public class ConfigServiceImpl implements ConfigService {
     @Override
     public boolean refreshCache() {
         redisTemplate.delete(RedisConstants.System.CONFIG);
-        List<Config> list = this.list();
+        List<Config> list = configMapper.selectList(Wrappers.emptyWrapper());
         if (list != null) {
             Map<String, String> map = list.stream().collect(Collectors.toMap(Config::getConfigKey, Config::getConfigValue));
             redisTemplate.opsForHash().putAll(RedisConstants.System.CONFIG, map);

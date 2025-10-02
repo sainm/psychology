@@ -2,9 +2,10 @@ package com.mindvoice.psych.system.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.mindvoice.psych.system.model.bo.VisitCount;
-import com.mindvoice.psych.system.model.bo.VisitStatsBO;
-import com.mindvoice.psych.system.model.entity.Log;
+
+import com.mindvoice.psych.common.annotation.Log;
+import com.mindvoice.psych.system.bo.VisitCount;
+import com.mindvoice.psych.system.bo.VisitStatsBO;
 import com.mindvoice.psych.system.model.query.LogPageQuery;
 import com.mindvoice.psych.system.model.vo.LogPageVO;
 import org.apache.ibatis.annotations.Mapper;

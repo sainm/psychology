@@ -14,7 +14,6 @@ import com.mindvoice.psych.core.security.filter.CaptchaValidationFilter;
 import com.mindvoice.psych.core.security.filter.TokenAuthenticationFilter;
 import com.mindvoice.psych.core.security.token.TokenManager;
 import com.mindvoice.psych.core.security.service.SysUserDetailsService;
-import com.mindvoice.psych.system.service.ConfigService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

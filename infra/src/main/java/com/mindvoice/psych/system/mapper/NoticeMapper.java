@@ -2,6 +2,10 @@ package com.mindvoice.psych.system.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.mindvoice.psych.system.bo.NoticeBO;
+import com.mindvoice.psych.system.entity.Notice;
+import com.mindvoice.psych.system.model.query.NoticePageQuery;
+import com.mindvoice.psych.system.model.vo.NoticePageVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 

@@ -1,15 +1,15 @@
 package com.mindvoice.psych.core.server.system;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.mindvoice.psych.system.model.bo.VisitCount;
-import com.mindvoice.psych.system.model.bo.VisitStatsBO;
-import com.mindvoice.psych.system.model.entity.Log;
+import com.mindvoice.psych.system.bo.VisitCount;
+import com.mindvoice.psych.system.bo.VisitStatsBO;
+import com.mindvoice.psych.system.mapper.LogMapper;
 import com.mindvoice.psych.system.model.query.LogPageQuery;
 import com.mindvoice.psych.system.model.vo.LogPageVO;
 import com.mindvoice.psych.system.model.vo.VisitStatsVO;
 import com.mindvoice.psych.system.model.vo.VisitTrendVO;
 import com.mindvoice.psych.system.service.LogService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -25,8 +25,11 @@ import java.util.stream.Collectors;
  * @since 2.10.0
  */
 @Service
-public class LogServiceImpl extends ServiceImpl<LogMapper, Log>
-        implements LogService {
+@RequiredArgsConstructor
+public class LogServiceImpl implements LogService {
+
+
+    private final LogMapper  logMapper;
 
     /**
      * 获取日志分页列表
@@ -34,10 +37,8 @@ public class LogServiceImpl extends ServiceImpl<LogMapper, Log>
      * @param queryParams 查询参数
      * @return 日志分页列表
      */
-    @Override
     public Page<LogPageVO> getLogPage(LogPageQuery queryParams) {
-        return this.baseMapper.getLogPage(new Page<>(queryParams.getPageNum(), queryParams.getPageSize()),
-                queryParams);
+        return logMapper.getLogPage(new Page<>(queryParams.getPageNum(), queryParams.getPageSize()), queryParams);
     }
 
     /**
@@ -60,8 +61,8 @@ public class LogServiceImpl extends ServiceImpl<LogMapper, Log>
         visitTrend.setDates(dates);
 
         // 获取访问量和访问 IP 数的统计数据
-        List<VisitCount> pvCounts = this.baseMapper.getPvCounts(dates.get(0) + " 00:00:00", dates.get(dates.size() - 1) + " 23:59:59");
-        List<VisitCount> ipCounts = this.baseMapper.getIpCounts(dates.get(0) + " 00:00:00", dates.get(dates.size() - 1) + " 23:59:59");
+        List<VisitCount> pvCounts = logMapper.getPvCounts(dates.get(0) + " 00:00:00", dates.get(dates.size() - 1) + " 23:59:59");
+        List<VisitCount> ipCounts = logMapper.getIpCounts(dates.get(0) + " 00:00:00", dates.get(dates.size() - 1) + " 23:59:59");
 
         // 将统计数据转换为 Map
         Map<String, Integer> pvMap = pvCounts.stream().collect(Collectors.toMap(VisitCount::getDate, VisitCount::getCount));
@@ -90,16 +91,16 @@ public class LogServiceImpl extends ServiceImpl<LogMapper, Log>
         VisitStatsVO result = new VisitStatsVO();
 
         // 访客数统计(UV)
-        VisitStatsBO uvStats = this.baseMapper.getUvStats();
-        if(uvStats!=null){
+        VisitStatsBO uvStats = logMapper.getUvStats();
+        if (uvStats != null) {
             result.setTodayUvCount(uvStats.getTodayCount());
             result.setTotalUvCount(uvStats.getTotalCount());
             result.setUvGrowthRate(uvStats.getGrowthRate());
         }
 
         // 浏览量统计(PV)
-        VisitStatsBO pvStats = this.baseMapper.getPvStats();
-        if(pvStats!=null){
+        VisitStatsBO pvStats = logMapper.getPvStats();
+        if (pvStats != null) {
             result.setTodayPvCount(pvStats.getTodayCount());
             result.setTotalPvCount(pvStats.getTotalCount());
             result.setPvGrowthRate(pvStats.getGrowthRate());

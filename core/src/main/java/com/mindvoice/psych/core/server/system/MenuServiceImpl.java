@@ -6,11 +6,18 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mindvoice.psych.system.model.entity.Menu;
+import com.mindvoice.psych.common.util.BeanUtils;
+import com.mindvoice.psych.system.entity.Menu;
+import com.mindvoice.psych.system.mapper.MenuMapper;
+import com.mindvoice.psych.system.model.form.MenuForm;
 import com.mindvoice.psych.system.model.query.MenuQuery;
 import com.mindvoice.psych.system.model.vo.MenuVO;
+import com.mindvoice.psych.system.model.vo.RouteVO;
 import com.mindvoice.psych.system.service.MenuService;
 import com.mindvoice.psych.system.service.RoleMenuService;
 import com.mindvoice.psych.common.constant.SystemConstants;
@@ -18,11 +25,11 @@ import com.mindvoice.psych.common.enums.StatusEnum;
 import com.mindvoice.psych.common.model.KeyValue;
 import com.mindvoice.psych.common.model.Option;
 import com.mindvoice.psych.core.security.util.SecurityUtils;
-import com.mindvoice.psych.system.converter.MenuConverter;
 import com.mindvoice.psych.system.enums.MenuTypeEnum;
 
 import lombok.RequiredArgsConstructor;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 
@@ -39,9 +46,10 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class MenuServiceImpl implements MenuService {
 
-    private final MenuConverter menuConverter;
 
     private final RoleMenuService roleMenuService;
+
+    private final MenuMapper menuMapper;
 
 
     /**
@@ -51,7 +59,7 @@ public class MenuServiceImpl implements MenuService {
      */
     @Override
     public List<MenuVO> listMenus(MenuQuery queryParams) {
-        List<Menu> menus = this.list(new LambdaQueryWrapper<Menu>()
+        List<Menu> menus = menuMapper.selectList(new LambdaQueryWrapper<Menu>()
                 .like(StrUtil.isNotBlank(queryParams.getKeywords()), Menu::getName, queryParams.getKeywords())
                 .orderByAsc(Menu::getSort)
         );
@@ -88,7 +96,8 @@ public class MenuServiceImpl implements MenuService {
                 .stream()
                 .filter(menu -> menu.getParentId().equals(parentId))
                 .map(entity -> {
-                    MenuVO menuVO = menuConverter.toVo(entity);
+                    MenuVO menuVO = BeanUtils.toBean(entity, MenuVO.class);
+
                     List<MenuVO> children = buildMenuTree(entity.getId(), menuList);
                     menuVO.setChildren(children);
                     return menuVO;
@@ -102,7 +111,7 @@ public class MenuServiceImpl implements MenuService {
      */
     @Override
     public List<Option<Long>> listMenuOptions(boolean onlyParent) {
-        List<Menu> menuList = this.list(new LambdaQueryWrapper<Menu>()
+        List<Menu> menuList = menuMapper.selectList(new LambdaQueryWrapper<Menu>()
                 .in(onlyParent, Menu::getType, MenuTypeEnum.CATALOG.getValue(), MenuTypeEnum.MENU.getValue())
                 .orderByAsc(Menu::getSort)
         );
@@ -147,22 +156,22 @@ public class MenuServiceImpl implements MenuService {
         List<Menu> menuList;
         if (SecurityUtils.isRoot()) {
             // 超级管理员获取所有菜单
-            menuList = this.list(new LambdaQueryWrapper<Menu>()
+            menuList = menuMapper.selectList(new LambdaQueryWrapper<Menu>()
                     .ne(Menu::getType, MenuTypeEnum.BUTTON.getValue())
                     .orderByAsc(Menu::getSort)
             );
         } else {
-            menuList = this.baseMapper.getMenusByRoleCodes(roleCodes);
+            menuList = menuMapper.getMenusByRoleCodes(roleCodes);
         }
         return buildRoutes(SystemConstants.ROOT_NODE_ID, menuList);
     }
 
     /**
      * 获取当前用户的菜单路由列表（指定数据源）
-     * 
+     *
      * @param datasource 数据源名称
      *                   - master: 主库菜单数据
-     *                   - naiveui: NaiveUI项目菜单数据  
+     *                   - naiveui: NaiveUI项目菜单数据
      *                   - template: 模板项目菜单数据
      */
     @Override
@@ -263,7 +272,7 @@ public class MenuServiceImpl implements MenuService {
         if (Objects.equals(menuForm.getParentId(), menuForm.getId())) {
             throw new RuntimeException("父级菜单不能为当前菜单");
         }
-        Menu entity = menuConverter.toEntity(menuForm);
+        Menu entity = BeanUtils.toBean(menuForm, Menu.class);
         String treePath = generateMenuTreePath(menuForm.getParentId());
         entity.setTreePath(treePath);
 
@@ -277,7 +286,7 @@ public class MenuServiceImpl implements MenuService {
         }
         // 新增类型为菜单时候 路由名称唯一
         if (MenuTypeEnum.MENU.getValue().equals(menuType)) {
-            Assert.isFalse(this.exists(new LambdaQueryWrapper<Menu>()
+            Assert.isFalse(menuMapper.exists(new LambdaQueryWrapper<Menu>()
                     .eq(Menu::getRouteName, entity.getRouteName())
                     .ne(menuForm.getId() != null, Menu::getId, menuForm.getId())
             ), "路由名称已存在");
@@ -286,7 +295,7 @@ public class MenuServiceImpl implements MenuService {
             entity.setRouteName(null);
         }
 
-        boolean result = this.saveOrUpdate(entity);
+        boolean result = menuMapper.insertOrUpdate(entity);
         if (result) {
             // 编辑刷新角色权限缓存
             if (menuForm.getId() != null) {
@@ -305,11 +314,11 @@ public class MenuServiceImpl implements MenuService {
      * @param treePath 当前菜单树路径
      */
     private void updateChildrenTreePath(Long id, String treePath) {
-        List<Menu> children = this.list(new LambdaQueryWrapper<Menu>().eq(Menu::getParentId, id));
+        List<Menu> children = menuMapper.selectList(new LambdaQueryWrapper<Menu>().eq(Menu::getParentId, id));
         if (CollectionUtil.isNotEmpty(children)) {
             // 子菜单的树路径等于父菜单的树路径加上父菜单ID
             String childTreePath = treePath + "," + id;
-            this.update(new LambdaUpdateWrapper<Menu>()
+            menuMapper.update(new LambdaUpdateWrapper<Menu>()
                     .eq(Menu::getParentId, id)
                     .set(Menu::getTreePath, childTreePath)
             );
@@ -330,7 +339,7 @@ public class MenuServiceImpl implements MenuService {
         if (SystemConstants.ROOT_NODE_ID.equals(parentId)) {
             return String.valueOf(parentId);
         } else {
-            Menu parent = this.getById(parentId);
+            Menu parent = menuMapper.selectById(parentId);
             return parent != null ? parent.getTreePath() + "," + parent.getId() : null;
         }
     }
@@ -346,10 +355,10 @@ public class MenuServiceImpl implements MenuService {
     @Override
     @CacheEvict(cacheNames = "menu", key = "'routes'")
     public boolean updateMenuVisible(Long menuId, Integer visible) {
-        return this.update(new LambdaUpdateWrapper<Menu>()
+        return SqlHelper.retBool(menuMapper.update(new LambdaUpdateWrapper<Menu>()
                 .eq(Menu::getId, menuId)
                 .set(Menu::getVisible, visible)
-        );
+        ));
     }
 
     /**
@@ -360,9 +369,9 @@ public class MenuServiceImpl implements MenuService {
      */
     @Override
     public MenuForm getMenuForm(Long id) {
-        Menu entity = this.getById(id);
+        Menu entity = menuMapper.selectById(id);
         Assert.isTrue(entity != null, "菜单不存在");
-        MenuForm formData = menuConverter.toForm(entity);
+        MenuForm formData = BeanUtils.toBean(entity, MenuForm.class);
         // 路由参数字符串 {"id":"1","name":"张三"} 转换为 [{key:"id", value:"1"}, {key:"name", value:"张三"}]
         String params = entity.getParams();
         if (StrUtil.isNotBlank(params)) {
@@ -396,10 +405,10 @@ public class MenuServiceImpl implements MenuService {
     @Override
     @CacheEvict(cacheNames = "menu", key = "'routes'")
     public boolean deleteMenu(Long id) {
-        boolean result = this.remove(new LambdaQueryWrapper<Menu>()
+        boolean result = SqlHelper.retBool(menuMapper.delete(new LambdaQueryWrapper<Menu>()
                 .eq(Menu::getId, id)
                 .or()
-                .apply("CONCAT (',',tree_path,',') LIKE CONCAT('%,',{0},',%')", id));
+                .apply("CONCAT (',',tree_path,',') LIKE CONCAT('%,',{0},',%')", id)));
 
 
         // 刷新角色权限缓存

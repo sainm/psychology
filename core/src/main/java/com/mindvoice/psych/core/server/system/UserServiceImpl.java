@@ -6,11 +6,20 @@ import cn.hutool.core.util.StrUtil;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
+import com.mindvoice.psych.common.util.BeanUtils;
+import com.mindvoice.psych.system.bo.UserBO;
+import com.mindvoice.psych.system.entity.DictItem;
 import com.mindvoice.psych.system.entity.User;
+import com.mindvoice.psych.system.entity.UserRole;
+import com.mindvoice.psych.system.mapper.DictItemMapper;
 import com.mindvoice.psych.system.mapper.UserMapper;
-import com.mindvoice.psych.system.model.form.EmailUpdateForm;
-import com.mindvoice.psych.system.model.form.MobileUpdateForm;
-import com.mindvoice.psych.system.model.form.UserForm;
+import com.mindvoice.psych.system.mapper.UserRoleMapper;
+import com.mindvoice.psych.system.model.dto.CurrentUserDTO;
+import com.mindvoice.psych.system.model.dto.UserExportDTO;
+import com.mindvoice.psych.system.model.form.*;
+import com.mindvoice.psych.system.model.query.UserPageQuery;
+import com.mindvoice.psych.system.model.vo.UserProfileVO;
 import com.mindvoice.psych.system.service.DictItemService;
 import com.mindvoice.psych.system.service.RoleService;
 import com.mindvoice.psych.system.service.UserRoleService;
@@ -67,10 +76,12 @@ public class UserServiceImpl implements UserService {
 
     private final TokenManager tokenManager;
 
-    private final DictItemService dictItemService;
-
+//    private final DictItemService dictItemService;
+    private final DictItemMapper dictItemMapper;
 
     private final UserMapper userMapper;
+
+    private final UserRoleMapper userRoleMapper;
 
 //    /**
 //     * 获取用户分页列表
@@ -124,7 +135,8 @@ public class UserServiceImpl implements UserService {
 
         // 实体转换 form->entity
 //        BeanUtils.toBean()
-        User entity = userConverter.toEntity(userForm);
+
+        User entity = BeanUtils.toBean(userForm, User.class);
 
         // 设置默认加密密码
         String defaultEncryptPwd = passwordEncoder.encode(SystemConstants.DEFAULT_PASSWORD);
@@ -132,7 +144,7 @@ public class UserServiceImpl implements UserService {
         entity.setCreateBy(SecurityUtils.getUserId());
 
         // 新增用户
-        boolean result = this.save(entity);
+        boolean result = SqlHelper.retBool(userMapper.insert(entity));
 
         if (result) {
             // 保存用户角色
@@ -153,18 +165,18 @@ public class UserServiceImpl implements UserService {
     public boolean updateUser(Long userId, UserForm userForm) {
 
         String username = userForm.getUsername();
-        long count = userMapper.selectCount (new LambdaQueryWrapper<User>()
+        long count = userMapper.selectCount(new LambdaQueryWrapper<User>()
                 .eq(User::getUsername, username)
                 .ne(User::getId, userId)
         );
         Assert.isTrue(count == 0, "用户名已存在");
 
         // form -> entity
-        User entity = userConverter.toEntity(userForm);
+        User entity = BeanUtils.toBean(userForm, User.class);
         entity.setUpdateBy(SecurityUtils.getUserId());
 
         // 修改用户
-        boolean result = this.updateById(entity);
+        boolean result = SqlHelper.retBool(userMapper.updateById(entity));
 
         if (result) {
             // 保存用户角色
@@ -186,7 +198,7 @@ public class UserServiceImpl implements UserService {
         List<Long> ids = Arrays.stream(idsStr.split(","))
                 .map(Long::parseLong)
                 .collect(Collectors.toList());
-        return this.removeByIds(ids);
+        return SqlHelper.retBool(userMapper.deleteByIds(ids));
 
     }
 
@@ -198,7 +210,7 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public UserAuthCredentials getAuthCredentialsByUsername(String username) {
-        UserAuthCredentials userAuthCredentials = this.baseMapper.getAuthCredentialsByUsername(username);
+        UserAuthCredentials userAuthCredentials = userMapper.getAuthCredentialsByUsername(username);
         if (userAuthCredentials != null) {
             Set<String> roles = userAuthCredentials.getRoles();
             // 获取最大范围的数据权限
@@ -219,7 +231,7 @@ public class UserServiceImpl implements UserService {
         if (StrUtil.isBlank(openId)) {
             return null;
         }
-        UserAuthCredentials userAuthCredentials = this.baseMapper.getAuthCredentialsByOpenId(openId);
+        UserAuthCredentials userAuthCredentials = userMapper.getAuthCredentialsByOpenId(openId);
         if (userAuthCredentials != null) {
             Set<String> roles = userAuthCredentials.getRoles();
             // 获取最大范围的数据权限
@@ -240,7 +252,7 @@ public class UserServiceImpl implements UserService {
         if (StrUtil.isBlank(mobile)) {
             return null;
         }
-        UserAuthCredentials userAuthCredentials = this.baseMapper.getAuthCredentialsByMobile(mobile);
+        UserAuthCredentials userAuthCredentials = userMapper.getAuthCredentialsByMobile(mobile);
         if (userAuthCredentials != null) {
             Set<String> roles = userAuthCredentials.getRoles();
             // 获取最大范围的数据权限
@@ -264,7 +276,7 @@ public class UserServiceImpl implements UserService {
         }
 
         // 查询是否已存在该openId的用户
-        User existUser = this.getOne(
+        User existUser = userMapper.selectOne(
                 new LambdaQueryWrapper<User>()
                         .eq(User::getOpenid, openId)
         );
@@ -284,7 +296,7 @@ public class UserServiceImpl implements UserService {
         newUser.setPassword(SystemConstants.DEFAULT_PASSWORD);
         newUser.setCreateTime(LocalDateTime.now());
         newUser.setUpdateTime(LocalDateTime.now());
-        this.save(newUser);
+        userMapper.insert(newUser);
         // 为了默认系统管理员角色，这里按需调整，实际情况绑定已存在的系统用户，另一种情况是给默认游客角色，然后由系统管理员设置用户的角色
         UserRole userRole = new UserRole();
         userRole.setUserId(newUser.getId());
@@ -308,7 +320,7 @@ public class UserServiceImpl implements UserService {
         }
 
         // 先查询是否已存在手机号对应的用户
-        User existingUser = this.getOne(
+        User existingUser = userMapper.selectOne(
                 new LambdaQueryWrapper<User>()
                         .eq(User::getMobile, mobile)
         );
@@ -336,7 +348,7 @@ public class UserServiceImpl implements UserService {
         newUser.setGender(0); // 保密
         newUser.setCreateTime(LocalDateTime.now());
         newUser.setUpdateTime(LocalDateTime.now());
-        this.save(newUser);
+        userMapper.insert(newUser);
         // 为了默认系统管理员角色，这里按需调整，实际情况绑定已存在的系统用户，另一种情况是给默认游客角色，然后由系统管理员设置用户的角色
         UserRole userRole = new UserRole();
         userRole.setUserId(newUser.getId());
@@ -360,7 +372,7 @@ public class UserServiceImpl implements UserService {
         }
 
         // 检查是否已有其他用户绑定了此openId
-        User existingUser = this.getOne(
+        User existingUser = userMapper.selectOne(
                 new LambdaQueryWrapper<User>()
                         .eq(User::getOpenid, openId)
                         .ne(User::getId, userId)
@@ -372,13 +384,13 @@ public class UserServiceImpl implements UserService {
         }
 
         // 更新用户openId
-        boolean updated = this.update(
+        boolean updated = SqlHelper.retBool(userMapper.update(
                 new LambdaUpdateWrapper<User>()
                         .eq(User::getId, userId)
                         .set(User::getOpenid, openId)
                         .set(User::getUpdateTime, LocalDateTime.now())
-        );
-        return updated ;
+        ));
+        return updated;
     }
 
     /**
@@ -393,10 +405,10 @@ public class UserServiceImpl implements UserService {
         boolean isRoot = SecurityUtils.isRoot();
         queryParams.setIsRoot(isRoot);
 
-        List<UserExportDTO> exportUsers = this.baseMapper.listExportUsers(queryParams);
+        List<UserExportDTO> exportUsers = userMapper.listExportUsers(queryParams);
         if (CollectionUtil.isNotEmpty(exportUsers)) {
             //获取性别的字典项
-            Map<String, String> genderMap = dictItemService.list(
+            Map<String, String> genderMap = dictItemMapper.selectList(
                             new LambdaQueryWrapper<DictItem>().eq(DictItem::getDictCode,
                                     DictCodeEnum.GENDER.getValue())
                     ).stream()
@@ -431,7 +443,7 @@ public class UserServiceImpl implements UserService {
         String username = SecurityUtils.getUsername();
 
         // 获取登录用户基础信息
-        User user = this.getOne(new LambdaQueryWrapper<User>()
+        User user = userMapper.selectOne(new LambdaQueryWrapper<User>()
                 .eq(User::getUsername, username)
                 .select(
                         User::getId,
@@ -441,7 +453,7 @@ public class UserServiceImpl implements UserService {
                 )
         );
         // entity->VO
-        CurrentUserDTO userInfoVO = userConverter.toCurrentUserDto(user);
+        CurrentUserDTO userInfoVO = BeanUtils.toBean(user, CurrentUserDTO.class);
 
         // 用户角色集合
         Set<String> roles = SecurityUtils.getRoles();
@@ -463,8 +475,8 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public UserProfileVO getUserProfile(Long userId) {
-        UserBO entity = this.baseMapper.getUserProfile(userId);
-        return userConverter.toProfileVo(entity);
+        UserBO entity = userMapper.getUserProfile(userId);
+        return BeanUtils.toBean(entity, UserProfileVO.class);
     }
 
     /**
@@ -476,9 +488,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean updateUserProfile(UserProfileForm formData) {
         Long userId = SecurityUtils.getUserId();
-        User entity = userConverter.toEntity(formData);
+        User entity = BeanUtils.toBean(formData, User.class);
         entity.setId(userId);
-        return this.updateById(entity);
+        return SqlHelper.retBool(userMapper.updateById(entity));
     }
 
     /**
@@ -491,7 +503,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean changePassword(Long userId, PasswordUpdateForm data) {
 
-        User user = this.getById(userId);
+        User user = userMapper.selectById(userId);
         if (user == null) {
             throw new BusinessException("用户不存在");
         }
@@ -513,10 +525,10 @@ public class UserServiceImpl implements UserService {
         }
 
         String newPassword = data.getNewPassword();
-        boolean result = this.update(new LambdaUpdateWrapper<User>()
+        boolean result = SqlHelper.retBool(userMapper.update(new LambdaUpdateWrapper<User>()
                 .eq(User::getId, userId)
                 .set(User::getPassword, passwordEncoder.encode(newPassword))
-        );
+        ));
 
         if (result) {
             // 加入黑名单，重新登录
@@ -535,10 +547,10 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public boolean resetPassword(Long userId, String password) {
-        return this.update(new LambdaUpdateWrapper<User>()
+        return SqlHelper.retBool(userMapper.update(new LambdaUpdateWrapper<User>()
                 .eq(User::getId, userId)
                 .set(User::getPassword, passwordEncoder.encode(password))
-        );
+        ));
     }
 
     /**
@@ -575,7 +587,7 @@ public class UserServiceImpl implements UserService {
     public boolean bindOrChangeMobile(MobileUpdateForm form) {
 
         Long currentUserId = SecurityUtils.getUserId();
-        User currentUser = this.getById(currentUserId);
+        User currentUser = userMapper.selectById(currentUserId);
 
         if (currentUser == null) {
             throw new BusinessException("用户不存在");
@@ -599,11 +611,11 @@ public class UserServiceImpl implements UserService {
         redisTemplate.delete(cacheKey);
 
         // 更新手机号码
-        return this.update(
+        return SqlHelper.retBool(userMapper.update(
                 new LambdaUpdateWrapper<User>()
                         .eq(User::getId, currentUserId)
                         .set(User::getMobile, mobile)
-        );
+        ));
     }
 
     /**
@@ -658,7 +670,7 @@ public class UserServiceImpl implements UserService {
         // 验证完成删除验证码
         redisTemplate.delete(redisCacheKey);
 
-        int updateRow = userMapper.update( new LambdaUpdateWrapper<User>()
+        int updateRow = userMapper.update(new LambdaUpdateWrapper<User>()
                 .eq(User::getId, currentUserId)
                 .set(User::getEmail, email));
         // 更新邮箱地址

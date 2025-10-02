@@ -2,9 +2,10 @@ package com.mindvoice.psych.core.server.system;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.mindvoice.psych.system.converter.DictItemConverter;
-import com.mindvoice.psych.system.model.entity.DictItem;
+import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
+import com.mindvoice.psych.common.util.BeanUtils;
+import com.mindvoice.psych.system.entity.DictItem;
+import com.mindvoice.psych.system.mapper.DictItemMapper;
 import com.mindvoice.psych.system.model.form.DictItemForm;
 import com.mindvoice.psych.system.model.query.DictItemPageQuery;
 import com.mindvoice.psych.system.model.vo.DictItemOptionVO;
@@ -24,9 +25,10 @@ import java.util.List;
  */
 @Service
 @RequiredArgsConstructor
-public class DictItemServiceImpl extends ServiceImpl<DictItemMapper, DictItem> implements DictItemService {
+public class DictItemServiceImpl implements DictItemService {
 
-    private final DictItemConverter dictItemConverter;
+    //    private final DictItemConverter dictItemConverter;
+    private final DictItemMapper dictItemMapper;
 
     /**
      * 获取字典项分页列表
@@ -34,13 +36,12 @@ public class DictItemServiceImpl extends ServiceImpl<DictItemMapper, DictItem> i
      * @param queryParams 查询参数
      * @return 字典项分页列表
      */
-    @Override
     public Page<DictItemPageVO> getDictItemPage(DictItemPageQuery queryParams) {
         int pageNum = queryParams.getPageNum();
         int pageSize = queryParams.getPageSize();
         Page<DictItemPageVO> page = new Page<>(pageNum, pageSize);
 
-        return this.baseMapper.getDictItemPage(page, queryParams);
+        return dictItemMapper.getDictItemPage(page, queryParams);
     }
 
 
@@ -51,21 +52,14 @@ public class DictItemServiceImpl extends ServiceImpl<DictItemMapper, DictItem> i
      */
     @Override
     public List<DictItemOptionVO> getDictItems(String dictCode) {
-        return this.list(
-                        new LambdaQueryWrapper<DictItem>()
-                                .eq(DictItem::getDictCode, dictCode)
-                                .eq(DictItem::getStatus, 1)
-                                .orderByAsc(DictItem::getSort)
-                ).stream()
-                .map(item -> {
-                    DictItemOptionVO dictItemOptionVO = new DictItemOptionVO();
-                    dictItemOptionVO.setLabel(item.getLabel());
-                    dictItemOptionVO.setValue(item.getValue());
-                    dictItemOptionVO.setTagType(item.getTagType());
-                    return dictItemOptionVO;
-                }).toList();
+        return dictItemMapper.selectList(new LambdaQueryWrapper<DictItem>().eq(DictItem::getDictCode, dictCode).eq(DictItem::getStatus, 1).orderByAsc(DictItem::getSort)).stream().map(item -> {
+            DictItemOptionVO dictItemOptionVO = new DictItemOptionVO();
+            dictItemOptionVO.setLabel(item.getLabel());
+            dictItemOptionVO.setValue(item.getValue());
+            dictItemOptionVO.setTagType(item.getTagType());
+            return dictItemOptionVO;
+        }).toList();
     }
-
 
 
     /**
@@ -76,8 +70,8 @@ public class DictItemServiceImpl extends ServiceImpl<DictItemMapper, DictItem> i
      */
     @Override
     public DictItemForm getDictItemForm(Long itemId) {
-        DictItem entity = this.getById(itemId);
-        return dictItemConverter.toForm(entity);
+        DictItem entity = dictItemMapper.selectById(itemId);
+        return BeanUtils.toBean(entity, DictItemForm.class);
     }
 
     /**
@@ -88,8 +82,8 @@ public class DictItemServiceImpl extends ServiceImpl<DictItemMapper, DictItem> i
      */
     @Override
     public boolean saveDictItem(DictItemForm formData) {
-        DictItem entity = dictItemConverter.toEntity(formData);
-        return this.save(entity);
+        DictItem entity = BeanUtils.toBean(formData, DictItem.class);
+        return SqlHelper.retBool(dictItemMapper.insert(entity));
     }
 
     /**
@@ -100,8 +94,8 @@ public class DictItemServiceImpl extends ServiceImpl<DictItemMapper, DictItem> i
      */
     @Override
     public boolean updateDictItem(DictItemForm formData) {
-        DictItem entity = dictItemConverter.toEntity(formData);
-        return this.updateById(entity);
+        DictItem entity = BeanUtils.toBean(formData, DictItem.class);
+        return SqlHelper.retBool(dictItemMapper.updateById(entity));
     }
 
     /**
@@ -111,10 +105,8 @@ public class DictItemServiceImpl extends ServiceImpl<DictItemMapper, DictItem> i
      */
     @Override
     public void deleteDictItemByIds(String ids) {
-        List<Long> idList = Arrays.stream(ids.split(","))
-          .map(Long::parseLong)
-          .toList();
-        this.removeByIds(idList);
+        List<Long> idList = Arrays.stream(ids.split(",")).map(Long::parseLong).toList();
+        dictItemMapper.deleteByIds(idList);
     }
 
 }

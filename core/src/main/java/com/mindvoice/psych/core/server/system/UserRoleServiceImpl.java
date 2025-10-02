@@ -2,10 +2,11 @@ package com.mindvoice.psych.core.server.system;
 
 import cn.hutool.core.collection.CollectionUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.mindvoice.psych.core.security.token.TokenManager;
 import com.mindvoice.psych.core.security.util.SecurityUtils;
-import com.mindvoice.psych.system.model.entity.UserRole;
+import com.mindvoice.psych.system.entity.UserRole;
+import com.mindvoice.psych.system.mapper.UserRoleMapper;
+import com.mindvoice.psych.system.service.UserRoleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,76 +17,69 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole> implements UserRoleService {
+public class UserRoleServiceImpl implements UserRoleService {
 
 
-  private final TokenManager tokenManager;
+    private final TokenManager tokenManager;
 
-  /**
-   * 保存用户角色
-   *
-   * @param userId 用户ID
-   * @param roleIds 选择的角色ID集合
-   * @return
-   */
-  @Override
-  public void saveUserRoles(Long userId, List<Long> roleIds) {
-    if (userId == null || CollectionUtil.isEmpty(roleIds)) {
-      return ;
+    private final UserRoleMapper userRoleMapper;
+
+    /**
+     * 保存用户角色
+     *
+     * @param userId  用户ID
+     * @param roleIds 选择的角色ID集合
+     * @return
+     */
+    @Override
+    public void saveUserRoles(Long userId, List<Long> roleIds) {
+        if (userId == null || CollectionUtil.isEmpty(roleIds)) {
+            return;
+        }
+
+        // 获取现有角色
+        List<Long> userRoleIds = userRoleMapper.selectList(new LambdaQueryWrapper<UserRole>().select(UserRole::getRoleId).eq(UserRole::getUserId, userId)).parallelStream().map(UserRole::getRoleId).toList();
+
+        // 使用Set提升对比效率
+        Set<Long> oldRoles = new HashSet<>(userRoleIds);
+        Set<Long> newRoles = new HashSet<>(roleIds);
+
+        // 计算变更集
+        Set<Long> addedRoles = new HashSet<>(newRoles);
+        addedRoles.removeAll(oldRoles);
+
+        Set<Long> removedRoles = new HashSet<>(oldRoles);
+        removedRoles.removeAll(newRoles);
+
+        boolean rolesChanged = !addedRoles.isEmpty() || !removedRoles.isEmpty();
+
+        // 批量保存新增角色
+        if (!addedRoles.isEmpty()) {
+            userRoleMapper.insert(addedRoles.stream().map(roleId -> new UserRole(userId, roleId)).collect(Collectors.toList()));
+        }
+
+        // 删除废弃角色
+        if (!removedRoles.isEmpty()) {
+            userRoleMapper.delete(new LambdaQueryWrapper<UserRole>().eq(UserRole::getUserId, userId).in(UserRole::getRoleId, removedRoles));
+        }
+
+        // 当权限变更时清除登录态
+        if (rolesChanged) {
+            // 获取用户所有有效token（根据实际token存储实现）
+            String accessToken = SecurityUtils.getTokenFromRequest();
+            tokenManager.invalidateToken(accessToken);
+        }
     }
 
-    // 获取现有角色
-    List<Long> userRoleIds = this.list(new LambdaQueryWrapper<UserRole>()
-        .select(UserRole::getRoleId)
-        .eq(UserRole::getUserId, userId))
-      .parallelStream()
-      .map(UserRole::getRoleId)
-      .toList();
-
-    // 使用Set提升对比效率
-    Set<Long> oldRoles = new HashSet<>(userRoleIds);
-    Set<Long> newRoles = new HashSet<>(roleIds);
-
-    // 计算变更集
-    Set<Long> addedRoles = new HashSet<>(newRoles);
-    addedRoles.removeAll(oldRoles);
-
-    Set<Long> removedRoles = new HashSet<>(oldRoles);
-    removedRoles.removeAll(newRoles);
-
-    boolean rolesChanged = !addedRoles.isEmpty() || !removedRoles.isEmpty();
-
-    // 批量保存新增角色
-    if (!addedRoles.isEmpty()) {
-      this.saveBatch(addedRoles.stream()
-        .map(roleId -> new UserRole(userId, roleId))
-        .collect(Collectors.toList()));
+    /**
+     * 判断角色是否存在绑定的用户
+     *
+     * @param roleId 角色ID
+     * @return true：已分配 false：未分配
+     */
+    @Override
+    public boolean hasAssignedUsers(Long roleId) {
+        int count = userRoleMapper.countUsersForRole(roleId);
+        return count > 0;
     }
-
-    // 删除废弃角色
-    if (!removedRoles.isEmpty()) {
-      this.remove(new LambdaQueryWrapper<UserRole>()
-        .eq(UserRole::getUserId, userId)
-        .in(UserRole::getRoleId, removedRoles));
-    }
-
-    // 当权限变更时清除登录态
-    if (rolesChanged) {
-      // 获取用户所有有效token（根据实际token存储实现）
-      String accessToken = SecurityUtils.getTokenFromRequest();
-      tokenManager.invalidateToken(accessToken);
-    }
-  }
-
-  /**
-   * 判断角色是否存在绑定的用户
-   *
-   * @param roleId 角色ID
-   * @return true：已分配 false：未分配
-   */
-  @Override
-  public boolean hasAssignedUsers(Long roleId) {
-    int count = this.baseMapper.countUsersForRole(roleId);
-    return count > 0;
-  }
 }

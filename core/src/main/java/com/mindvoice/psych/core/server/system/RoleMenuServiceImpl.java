@@ -1,10 +1,9 @@
 package com.mindvoice.psych.core.server.system;
 
 import cn.hutool.core.collection.CollectionUtil;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.mindvoice.psych.common.constant.RedisConstants;
-import com.mindvoice.psych.system.model.bo.RolePermsBO;
-import com.mindvoice.psych.system.model.entity.RoleMenu;
+import com.mindvoice.psych.system.bo.RolePermsBO;
+import com.mindvoice.psych.system.mapper.RoleMenuMapper;
 import com.mindvoice.psych.system.service.RoleMenuService;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
@@ -24,9 +23,11 @@ import java.util.Set;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class RoleMenuServiceImpl extends ServiceImpl<RoleMenuMapper, RoleMenu> implements RoleMenuService {
+public class RoleMenuServiceImpl  implements RoleMenuService {
 
     private final RedisTemplate<String, Object> redisTemplate;
+
+    private final RoleMenuMapper roleMenuMapper;
 
     /**
      * 初始化权限缓存
@@ -45,7 +46,7 @@ public class RoleMenuServiceImpl extends ServiceImpl<RoleMenuMapper, RoleMenu> i
         // 清理权限缓存
         redisTemplate.opsForHash().delete(RedisConstants.System.ROLE_PERMS, "*");
 
-        List<RolePermsBO> list = this.baseMapper.getRolePermsList(null);
+        List<RolePermsBO> list = roleMenuMapper.getRolePermsList(null);
         if (CollectionUtil.isNotEmpty(list)) {
             list.forEach(item -> {
                 String roleCode = item.getRoleCode();
@@ -65,7 +66,7 @@ public class RoleMenuServiceImpl extends ServiceImpl<RoleMenuMapper, RoleMenu> i
         // 清理权限缓存
         redisTemplate.opsForHash().delete(RedisConstants.System.ROLE_PERMS, roleCode);
 
-        List<RolePermsBO> list = this.baseMapper.getRolePermsList(roleCode);
+        List<RolePermsBO> list = roleMenuMapper.getRolePermsList(roleCode);
         if (CollectionUtil.isNotEmpty(list)) {
             RolePermsBO rolePerms = list.get(0);
             if (rolePerms == null) {
@@ -88,7 +89,7 @@ public class RoleMenuServiceImpl extends ServiceImpl<RoleMenuMapper, RoleMenu> i
         redisTemplate.opsForHash().delete(RedisConstants.System.ROLE_PERMS, oldRoleCode);
 
         // 添加新角色权限缓存
-        List<RolePermsBO> list = this.baseMapper.getRolePermsList(newRoleCode);
+        List<RolePermsBO> list = roleMenuMapper.getRolePermsList(newRoleCode);
         if (CollectionUtil.isNotEmpty(list)) {
             RolePermsBO rolePerms = list.get(0);
             if (rolePerms == null) {
@@ -108,7 +109,7 @@ public class RoleMenuServiceImpl extends ServiceImpl<RoleMenuMapper, RoleMenu> i
      */
     @Override
     public Set<String> getRolePermsByRoleCodes(Set<String> roles) {
-        return this.baseMapper.listRolePerms(roles);
+        return roleMenuMapper.listRolePerms(roles);
     }
 
     /**
@@ -119,7 +120,7 @@ public class RoleMenuServiceImpl extends ServiceImpl<RoleMenuMapper, RoleMenu> i
      */
     @Override
     public List<Long> listMenuIdsByRoleId(Long roleId) {
-        return this.baseMapper.listMenuIdsByRoleId(roleId);
+        return roleMenuMapper.listMenuIdsByRoleId(roleId);
     }
 
 }

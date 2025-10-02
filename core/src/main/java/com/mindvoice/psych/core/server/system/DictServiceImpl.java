@@ -3,12 +3,14 @@ package com.mindvoice.psych.core.server.system;
 import cn.hutool.core.lang.Assert;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
 import com.mindvoice.psych.common.exception.BusinessException;
 import com.mindvoice.psych.common.model.Option;
-import com.mindvoice.psych.system.converter.DictConverter;
-import com.mindvoice.psych.system.model.entity.Dict;
-import com.mindvoice.psych.system.model.entity.DictItem;
+import com.mindvoice.psych.common.util.BeanUtils;
+import com.mindvoice.psych.system.entity.Dict;
+import com.mindvoice.psych.system.entity.DictItem;
+import com.mindvoice.psych.system.mapper.DictItemMapper;
+import com.mindvoice.psych.system.mapper.DictMapper;
 import com.mindvoice.psych.system.model.form.DictForm;
 import com.mindvoice.psych.system.model.query.DictPageQuery;
 import com.mindvoice.psych.system.model.vo.DictPageVO;
@@ -28,24 +30,23 @@ import java.util.List;
  */
 @Service
 @RequiredArgsConstructor
-public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements DictService {
+public class DictServiceImpl implements DictService {
 
-    private final DictItemService dictItemService;
-    private final DictConverter dictConverter;
+    private final DictItemMapper dictItemMapper;
+    private final DictMapper dictMapper;
 
     /**
      * 字典分页列表
      *
      * @param queryParams 分页查询对象
      */
-    @Override
     public Page<DictPageVO> getDictPage(DictPageQuery queryParams) {
         // 查询参数
         int pageNum = queryParams.getPageNum();
         int pageSize = queryParams.getPageSize();
 
         // 查询数据
-        return this.baseMapper.getDictPage(new Page<>(pageNum, pageSize), queryParams);
+        return dictMapper.getDictPage(new Page<>(pageNum, pageSize), queryParams);
     }
 
     /**
@@ -55,7 +56,7 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
      */
     @Override
     public List<Option<String>> getDictList() {
-        return this.list(new LambdaQueryWrapper<Dict>().eq(Dict::getStatus, 1))
+        return dictMapper.selectList(new LambdaQueryWrapper<Dict>().eq(Dict::getStatus, 1))
                 .stream()
                 .map(item -> new Option<>(item.getDictCode(), item.getName()))
                 .toList();
@@ -70,18 +71,18 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
     @Override
     public boolean saveDict(DictForm dictForm) {
         // 保存字典
-        Dict entity = dictConverter.toEntity(dictForm);
+        Dict entity = BeanUtils.toBean(dictForm, Dict.class);
 
         // 校验 code 是否唯一
         String dictCode = entity.getDictCode();
 
-        long count = this.count(new LambdaQueryWrapper<Dict>()
+        long count = dictMapper.selectCount(new LambdaQueryWrapper<Dict>()
                 .eq(Dict::getDictCode, dictCode)
         );
 
         Assert.isTrue(count == 0, "字典编码已存在");
 
-        return this.save(entity);
+        return SqlHelper.retBool(dictMapper.insert(entity));
     }
 
 
@@ -93,11 +94,11 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
     @Override
     public DictForm getDictForm(Long id) {
         // 获取字典
-        Dict entity = this.getById(id);
+        Dict entity = dictMapper.selectById(id);
         if (entity == null) {
             throw new BusinessException("字典不存在");
         }
-        return dictConverter.toForm(entity);
+        return BeanUtils.toBean(entity, DictForm.class);
     }
 
     /**
@@ -110,25 +111,25 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
     @Transactional
     public boolean updateDict(Long id, DictForm dictForm) {
         // 获取字典
-        Dict entity = this.getById(id);
+        Dict entity = dictMapper.selectById(id);
         if (entity == null) {
             throw new BusinessException("字典不存在");
         }
         // 校验 code 是否唯一
         String dictCode = dictForm.getDictCode();
         if (!entity.getDictCode().equals(dictCode)) {
-            long count = this.count(new LambdaQueryWrapper<Dict>()
+            long count = dictMapper.selectCount(new LambdaQueryWrapper<Dict>()
                     .eq(Dict::getDictCode, dictCode)
             );
             Assert.isTrue(count == 0, "字典编码已存在");
         }
         // 更新字典
-        Dict dict = dictConverter.toEntity(dictForm);
+        Dict dict = BeanUtils.toBean(entity, Dict.class);
         dict.setId(id);
-        boolean result = this.updateById(dict);
+        boolean result = SqlHelper.retBool(dictMapper.updateById(dict));
         if (result) {
             // 更新字典数据
-            List<DictItem> dictItemList = dictItemService.list(
+            List<DictItem> dictItemList = dictItemMapper.selectList(
                     new LambdaQueryWrapper<DictItem>()
                             .eq(DictItem::getDictCode, entity.getDictCode())
                             .select(DictItem::getId)
@@ -137,7 +138,7 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
                 List<Long> dictItemIds = dictItemList.stream().map(DictItem::getId).toList();
                 DictItem dictItem = new DictItem();
                 dictItem.setDictCode(dict.getDictCode());
-                dictItemService.update(dictItem,
+                dictItemMapper.update(dictItem,
                         new LambdaQueryWrapper<DictItem>()
                                 .in(DictItem::getId, dictItemIds)
                 );
@@ -155,13 +156,13 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
     @Override
     public void deleteDictByIds(List<String> ids) {
         // 删除字典
-        this.removeByIds(ids);
+        dictMapper.deleteByIds(ids);
 
         // 删除字典项
-        List<Dict> list = this.listByIds(ids);
+        List<Dict> list = dictMapper.selectByIds(ids);
         if (!list.isEmpty()) {
             List<String> dictCodes = list.stream().map(Dict::getDictCode).toList();
-            dictItemService.remove(new LambdaQueryWrapper<DictItem>()
+            dictItemMapper.delete(new LambdaQueryWrapper<DictItem>()
                     .in(DictItem::getDictCode, dictCodes)
             );
         }
@@ -175,7 +176,7 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
      */
     @Override
     public List<String> getDictCodesByIds(List<String> ids) {
-        List<Dict> dictList = this.listByIds(ids);
+        List<Dict> dictList = dictMapper.selectByIds(ids);
         return dictList.stream().map(Dict::getDictCode).toList();
     }
 

@@ -3,9 +3,10 @@ package com.mindvoice.psych.core.server.system;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
 import com.mindvoice.psych.core.security.util.SecurityUtils;
-import com.mindvoice.psych.system.model.entity.UserNotice;
+import com.mindvoice.psych.system.entity.UserNotice;
+import com.mindvoice.psych.system.mapper.UserNoticeMapper;
 import com.mindvoice.psych.system.model.query.NoticePageQuery;
 import com.mindvoice.psych.system.model.vo.NoticePageVO;
 import com.mindvoice.psych.system.model.vo.UserNoticePageVO;
@@ -21,7 +22,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 @RequiredArgsConstructor
-public class UserNoticeServiceImpl extends ServiceImpl<UserNoticeMapper, UserNotice> implements UserNoticeService {
+public class UserNoticeServiceImpl implements UserNoticeService {
 
     private final UserNoticeMapper userNoticeMapper;
 
@@ -33,11 +34,11 @@ public class UserNoticeServiceImpl extends ServiceImpl<UserNoticeMapper, UserNot
     @Override
     public boolean readAll() {
         Long userId = SecurityUtils.getUserId();
-        return this.update(new LambdaUpdateWrapper<UserNotice>()
+        return SqlHelper.retBool(userNoticeMapper.update(new LambdaUpdateWrapper<UserNotice>()
                 .eq(UserNotice::getUserId, userId)
                 .eq(UserNotice::getIsRead, 0)
                 .set(UserNotice::getIsRead, 1)
-        );
+        ));
     }
 
     /**
@@ -47,9 +48,8 @@ public class UserNoticeServiceImpl extends ServiceImpl<UserNoticeMapper, UserNot
      * @param queryParams 查询参数
      * @return 通知公告分页列表
      */
-    @Override
     public IPage<UserNoticePageVO> getMyNoticePage(Page<NoticePageVO> page, NoticePageQuery queryParams) {
-        return this.getBaseMapper().getMyNoticePage(
+        return userNoticeMapper.getMyNoticePage(
                 new Page<>(queryParams.getPageNum(), queryParams.getPageSize()),
                 queryParams
         );

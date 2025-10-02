@@ -1,8 +1,9 @@
 package com.mindvoice.psych.system.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.mindvoice.psych.system.model.bo.RolePermsBO;
-import com.mindvoice.psych.system.model.entity.RoleMenu;
+
+import com.mindvoice.psych.system.bo.RolePermsBO;
+import com.mindvoice.psych.system.entity.RoleMenu;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;

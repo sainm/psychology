@@ -1,6 +1,7 @@
 package com.mindvoice.psych.system.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.mindvoice.psych.system.entity.Role;
 import com.mindvoice.psych.system.model.entity.Role;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -22,4 +23,5 @@ public interface RoleMapper extends BaseMapper<Role> {
      * @return
      */
     Integer getMaximumDataScope(Set<String> roles);
+
 }

@@ -3,14 +3,29 @@ package com.mindvoice.psych.core.server.system;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
 
-import com.mindvoice.psych.system.model.entity.Notice;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
+import com.mindvoice.psych.common.util.BeanUtils;
+import com.mindvoice.psych.system.bo.NoticeBO;
+import com.mindvoice.psych.system.entity.Notice;
+import com.mindvoice.psych.system.entity.User;
+import com.mindvoice.psych.system.entity.UserNotice;
+import com.mindvoice.psych.system.mapper.NoticeMapper;
+import com.mindvoice.psych.system.mapper.UserMapper;
+import com.mindvoice.psych.system.mapper.UserNoticeMapper;
+import com.mindvoice.psych.system.model.dto.NoticeDTO;
 import com.mindvoice.psych.system.model.form.NoticeForm;
+import com.mindvoice.psych.system.model.query.NoticePageQuery;
+import com.mindvoice.psych.system.model.vo.NoticeDetailVO;
+import com.mindvoice.psych.system.model.vo.UserNoticePageVO;
 import com.mindvoice.psych.system.service.NoticeService;
 import com.mindvoice.psych.system.service.UserNoticeService;
 import com.mindvoice.psych.system.service.UserService;
 import com.mindvoice.psych.common.exception.BusinessException;
 import com.mindvoice.psych.core.security.util.SecurityUtils;
-import com.mindvoice.psych.system.converter.NoticeConverter;
 import com.mindvoice.psych.system.enums.NoticePublishStatusEnum;
 import com.mindvoice.psych.system.enums.NoticeTargetEnum;
 import com.mindvoice.psych.system.service.UserOnlineService;
@@ -33,14 +48,13 @@ import java.util.stream.Collectors;
  */
 @Service
 @RequiredArgsConstructor
-public class NoticeServiceImpl  implements NoticeService {
+public class NoticeServiceImpl implements NoticeService {
 
-    private final NoticeConverter noticeConverter;
-    private final UserNoticeService userNoticeService;
-    private final UserService userService;
-//    private final SimpMessagingTemplate messagingTemplate;
+    private final UserNoticeMapper userNoticeMapper;
+    private final UserMapper userMapper;
+    //    private final SimpMessagingTemplate messagingTemplate;
     private final UserOnlineService userOnlineService;
-    NoticeMapper
+    private final NoticeMapper noticeMapper;
 //    /**
 //     * 获取通知公告分页列表
 //     *
@@ -64,8 +78,8 @@ public class NoticeServiceImpl  implements NoticeService {
      */
     @Override
     public NoticeForm getNoticeFormData(Long id) {
-        Notice entity = this.getById(id);
-        return noticeConverter.toForm(entity);
+        Notice entity = noticeMapper.selectById(id);
+        return BeanUtils.toBean(entity, NoticeForm.class);
     }
 
     /**
@@ -83,9 +97,10 @@ public class NoticeServiceImpl  implements NoticeService {
                 throw new BusinessException("推送指定用户不能为空");
             }
         }
-        Notice entity = noticeConverter.toEntity(formData);
+        Notice entity = BeanUtils.toBean(formData, Notice.class);
+
         entity.setCreateBy(SecurityUtils.getUserId());
-        return this.save(entity);
+        return SqlHelper.retBool(noticeMapper.insert(entity));
     }
 
     /**
@@ -104,8 +119,8 @@ public class NoticeServiceImpl  implements NoticeService {
             }
         }
 
-        Notice entity = noticeConverter.toEntity(formData);
-        return this.updateById(entity);
+        Notice entity = BeanUtils.toBean(formData, Notice.class);
+        return SqlHelper.retBool(noticeMapper.updateById(entity));
     }
 
     /**
@@ -125,10 +140,11 @@ public class NoticeServiceImpl  implements NoticeService {
         List<Long> idList = Arrays.stream(ids.split(","))
                 .map(Long::parseLong)
                 .toList();
-        boolean isRemoved = this.removeByIds(idList);
+        boolean isRemoved = SqlHelper.retBool(noticeMapper.deleteByIds(idList));
         if (isRemoved) {
             // 删除通知公告的同时，需要删除通知公告对应的用户通知状态
-            userNoticeService.remove(new LambdaQueryWrapper<UserNotice>().in(UserNotice::getNoticeId, idList));
+            userNoticeMapper.delete(new LambdaQueryWrapper<UserNotice>().in(UserNotice::getNoticeId, idList));
+//            noticeMapper
         }
         return isRemoved;
     }
@@ -142,7 +158,7 @@ public class NoticeServiceImpl  implements NoticeService {
     @Override
     @Transactional
     public boolean publishNotice(Long id) {
-        Notice notice = this.getById(id);
+        Notice notice = noticeMapper.selectById(id);
         if (notice == null) {
             throw new BusinessException("通知公告不存在");
         }
@@ -161,11 +177,11 @@ public class NoticeServiceImpl  implements NoticeService {
         notice.setPublishStatus(NoticePublishStatusEnum.PUBLISHED.getValue());
         notice.setPublisherId(SecurityUtils.getUserId());
         notice.setPublishTime(LocalDateTime.now());
-        boolean publishResult = this.updateById(notice);
+        boolean publishResult = SqlHelper.retBool(noticeMapper.updateById(notice));
 
         if (publishResult) {
             // 发布通知公告的同时，删除该通告之前的用户通知数据，因为可能是重新发布
-            userNoticeService.remove(
+            userNoticeMapper.delete(
                     new LambdaQueryWrapper<UserNotice>().eq(UserNotice::getNoticeId, id)
             );
 
@@ -175,7 +191,7 @@ public class NoticeServiceImpl  implements NoticeService {
                 targetUserIdList = Arrays.asList(targetUserIds.split(","));
             }
 
-            List<User> targetUserList = userService.list(
+            List<User> targetUserList = userMapper.selectList(
                     new LambdaQueryWrapper<User>()
                             // 如果是指定用户，则筛选出指定用户
                             .in(
@@ -194,14 +210,14 @@ public class NoticeServiceImpl  implements NoticeService {
             }).toList();
 
             if (CollectionUtil.isNotEmpty(userNoticeList)) {
-                userNoticeService.saveBatch(userNoticeList);
+                userNoticeMapper.insert(userNoticeList);
             }
 
             Set<String> receivers = targetUserList.stream().map(User::getUsername).collect(Collectors.toSet());
 
             Set<String> allOnlineUsers = userOnlineService.getOnlineUsers().stream()
-              .map(UserOnlineService.UserOnlineDTO::getUsername)
-              .collect(Collectors.toSet());
+                    .map(UserOnlineService.UserOnlineDTO::getUsername)
+                    .collect(Collectors.toSet());
 
             // 找出在线用户的通知接收者
             Set<String> onlineReceivers = new HashSet<>(CollectionUtil.intersection(receivers, allOnlineUsers));
@@ -212,7 +228,7 @@ public class NoticeServiceImpl  implements NoticeService {
             noticeDTO.setType(notice.getType());
             noticeDTO.setPublishTime(notice.getPublishTime());
 
-            onlineReceivers.forEach(receiver -> messagingTemplate.convertAndSendToUser(receiver, "/queue/message", noticeDTO));
+//            onlineReceivers.forEach(receiver -> messagingTemplate.convertAndSendToUser(receiver, "/queue/message", noticeDTO));
         }
         return publishResult;
     }
@@ -226,7 +242,7 @@ public class NoticeServiceImpl  implements NoticeService {
     @Override
     @Transactional
     public boolean revokeNotice(Long id) {
-        Notice notice = this.getById(id);
+        Notice notice = noticeMapper.selectById(id);
         if (notice == null) {
             throw new BusinessException("通知公告不存在");
         }
@@ -239,11 +255,11 @@ public class NoticeServiceImpl  implements NoticeService {
         notice.setRevokeTime(LocalDateTime.now());
         notice.setUpdateBy(SecurityUtils.getUserId());
 
-        boolean revokeResult = this.updateById(notice);
+        boolean revokeResult = SqlHelper.retBool(noticeMapper.updateById(notice));
 
         if (revokeResult) {
             // 撤回通知公告的同时，需要删除通知公告对应的用户通知状态
-            userNoticeService.remove(new LambdaQueryWrapper<UserNotice>()
+            userNoticeMapper.delete(new LambdaQueryWrapper<UserNotice>()
                     .eq(UserNotice::getNoticeId, id)
             );
         }
@@ -251,22 +267,21 @@ public class NoticeServiceImpl  implements NoticeService {
     }
 
     /**
-     *
      * @param id 通知公告ID
      * @return NoticeDetailVO 通知公告详情
      */
     @Override
     public NoticeDetailVO getNoticeDetail(Long id) {
-        NoticeBO noticeBO = this.baseMapper.getNoticeDetail(id);
+        NoticeBO noticeBO = noticeMapper.getNoticeDetail(id);
         // 更新用户通知公告的阅读状态
         Long userId = SecurityUtils.getUserId();
-        userNoticeService.update(new LambdaUpdateWrapper<UserNotice>()
+        userNoticeMapper.update(new LambdaUpdateWrapper<UserNotice>()
                 .eq(UserNotice::getNoticeId, id)
                 .eq(UserNotice::getUserId, userId)
                 .eq(UserNotice::getIsRead, 0)
                 .set(UserNotice::getIsRead, 1)
         );
-        return noticeConverter.toDetailVO(noticeBO);
+        return BeanUtils.toBean(noticeBO, NoticeDetailVO.class);
     }
 
     /**
@@ -275,10 +290,9 @@ public class NoticeServiceImpl  implements NoticeService {
      * @param queryParams 查询参数
      * @return 通知公告分页列表
      */
-    @Override
     public IPage<UserNoticePageVO> getMyNoticePage(NoticePageQuery queryParams) {
         queryParams.setUserId(SecurityUtils.getUserId());
-        return userNoticeService.getMyNoticePage(
+        return userNoticeMapper.getMyNoticePage(
                 new Page<>(queryParams.getPageNum(), queryParams.getPageSize()),
                 queryParams
         );
