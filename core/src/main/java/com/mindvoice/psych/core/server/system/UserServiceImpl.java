@@ -301,7 +301,7 @@ public class UserServiceImpl implements UserService {
         UserRole userRole = new UserRole();
         userRole.setUserId(newUser.getId());
         userRole.setRoleId(1L);  // TODO 系统管理员
-        userRoleService.save(userRole);
+        userRoleMapper.insert(userRole);
         return true;
     }
 
@@ -353,7 +353,7 @@ public class UserServiceImpl implements UserService {
         UserRole userRole = new UserRole();
         userRole.setUserId(newUser.getId());
         userRole.setRoleId(1L);  // TODO 系统管理员
-        userRoleService.save(userRole);
+        userRoleMapper.insert(userRole);
         return true;
     }
 

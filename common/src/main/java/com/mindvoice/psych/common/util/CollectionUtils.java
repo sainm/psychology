@@ -1,10 +1,10 @@
 package com.mindvoice.psych.common.util;
 
-import cn.biminds.sorting.framework.common.pojo.PageResult;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ArrayUtil;
 import com.google.common.collect.ImmutableMap;
+import com.mindvoice.psych.common.pojo.PageResult;
 
 import java.util.*;
 import java.util.function.*;

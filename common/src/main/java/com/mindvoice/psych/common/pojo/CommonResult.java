@@ -4,7 +4,9 @@ package com.mindvoice.psych.common.pojo;
 import cn.hutool.core.lang.Assert;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.mindvoice.psych.common.exception.ErrorCode;
+import com.mindvoice.psych.common.exception.ServiceException;
 import com.mindvoice.psych.common.exception.enums.GlobalErrorCodeConstants;
+import com.mindvoice.psych.system.util.ServiceExceptionUtil;
 import lombok.Data;
 
 import java.io.Serializable;

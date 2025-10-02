@@ -39,7 +39,7 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class RoleServiceImpl implements RoleService {
 
-//    private final RoleMenuService roleMenuService;
+    private final RoleMenuService roleMenuService;
     private final UserRoleService userRoleService;
 
     private final RoleMapper roleMapper;
@@ -111,6 +111,7 @@ public class RoleServiceImpl implements RoleService {
             // 判断角色编码或状态是否修改，修改了则刷新权限缓存
             if (oldRole != null && (!StrUtil.equals(oldRole.getCode(), roleCode) || !ObjectUtil.equals(oldRole.getStatus(), roleForm.getStatus()))) {
                 roleMenuService.refreshRolePermsCache(oldRole.getCode(), roleCode);
+
             }
         }
         return result;
@@ -204,11 +205,11 @@ public class RoleServiceImpl implements RoleService {
             throw new RuntimeException("角色不存在");
         }
         // 删除角色菜单
-        roleMenuService.remove(new LambdaQueryWrapper<RoleMenu>().eq(RoleMenu::getRoleId, roleId));
+        roleMenuMapper.delete(new LambdaQueryWrapper<RoleMenu>().eq(RoleMenu::getRoleId, roleId));
         // 新增角色菜单
         if (CollectionUtil.isNotEmpty(menuIds)) {
             List<RoleMenu> roleMenus = menuIds.stream().map(menuId -> new RoleMenu(roleId, menuId)).toList();
-            roleMenuService.saveBatch(roleMenus);
+            roleMenuMapper.insert(roleMenus);
         }
 
         // 刷新角色的权限缓存
