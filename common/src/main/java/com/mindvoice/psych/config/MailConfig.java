@@ -1,6 +1,6 @@
 package com.mindvoice.psych.config;
 
-import com.mindvoice.psych.config.property.MailProperties;
+import com.mindvoice.psych.shared.mail.model.MailProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

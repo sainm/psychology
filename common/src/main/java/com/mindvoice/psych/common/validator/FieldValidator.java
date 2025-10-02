@@ -1,4 +1,4 @@
-package com.mindvoice.psych.core.validator;
+package com.mindvoice.psych.common.validator;
 
 import com.mindvoice.psych.common.annotation.ValidField;
 import jakarta.validation.ConstraintValidator;

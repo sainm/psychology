@@ -1,4 +1,4 @@
-package com.mindvoice.psych.core.security.service;
+package com.mindvoice.psych.core.server.security;
 
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;

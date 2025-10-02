@@ -1,21 +1,26 @@
+
+plugins {
+    `java-library`
+}
+
 dependencies {
     implementation("com.baomidou:mybatis-plus-boot-starter:3.5.14")
     implementation("com.baomidou:mybatis-plus-jsqlparser:3.5.14")
-    implementation("com.github.binarywang:wx-java-miniapp-spring-boot-starter:4.7.8-20250927.171143")
-    implementation("org.springframework.boot:spring-boot-starter-aop:3.5.6")
     implementation("org.springframework.boot:spring-boot-starter-web")
-    implementation("org.springframework.boot:spring-boot-starter-data-redis:3.5.6")
     implementation("org.springframework.boot:spring-boot-starter-security:3.5.6")
-    implementation("org.springframework.boot:spring-boot-starter-websocket:3.5.6")
     implementation("com.aliyun.oss:aliyun-sdk-oss:3.18.3")
-    implementation("com.alibaba:easyexcel:4.0.3")
-    implementation("cn.hutool:hutool-all:5.8.40")
+    api("com.alibaba:easyexcel:4.0.3")
+    api("cn.hutool:hutool-all:5.8.40")
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.13")
     implementation("io.minio:minio:8.6.0")
     implementation("org.mapstruct:mapstruct:1.6.3")
-    implementation("com.xuxueli:xxl-job-core:3.2.0")
     implementation("org.springframework.boot:spring-boot-starter-mail:3.5.6")
-    implementation("org.redisson:redisson-spring-boot-starter:3.52.0")
+    api("org.redisson:redisson-spring-boot-starter:3.52.0")
     implementation("org.lionsoul:ip2region:2.7.0")
     implementation("com.github.ben-manes.caffeine:caffeine:3.2.2")
+    api("com.github.binarywang:wx-java-miniapp-spring-boot-starter:4.7.8-20250927.171143")
+    api("org.springframework.boot:spring-boot-starter-websocket:3.5.6")
+    implementation("com.xuxueli:xxl-job-core:3.2.0")
+    api("org.springframework.boot:spring-boot-starter-aop:3.5.6")
+    api("org.springframework.boot:spring-boot-starter-data-redis:3.5.6")
 }

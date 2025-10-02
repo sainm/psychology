@@ -1,5 +1,8 @@
 package com.mindvoice.psych.system.service;
 
+import com.mindvoice.psych.common.pojo.PageResult;
+import com.mindvoice.psych.system.model.query.LogPageQuery;
+import com.mindvoice.psych.system.model.vo.LogPageVO;
 import com.mindvoice.psych.system.model.vo.VisitStatsVO;
 import com.mindvoice.psych.system.model.vo.VisitTrendVO;
 
@@ -28,4 +31,5 @@ public interface LogService {
      */
     VisitStatsVO getVisitStats();
 
+    PageResult<LogPageVO> getLogPage(LogPageQuery queryParams);
 }

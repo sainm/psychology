@@ -2,10 +2,13 @@ package com.mindvoice.psych.core.server.system;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mindvoice.psych.system.model.dto.UserOnlineDTO;
+import com.mindvoice.psych.system.model.event.DictEvent;
 import com.mindvoice.psych.system.service.WebSocketService;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,7 +29,7 @@ public class WebSocketServiceImpl implements WebSocketService {
 
     // 在线用户映射表，key为用户名，value为用户在线信息
     private final Map<String, UserOnlineInfo> onlineUsers = new ConcurrentHashMap<>();
-    
+
     private SimpMessagingTemplate messagingTemplate;
     private final ObjectMapper objectMapper;
 
@@ -34,7 +37,7 @@ public class WebSocketServiceImpl implements WebSocketService {
     public WebSocketServiceImpl(ObjectMapper objectMapper) {
         this.objectMapper = objectMapper;
     }
-    
+
     @Autowired(required = false)
     public void setMessagingTemplate(SimpMessagingTemplate messagingTemplate) {
         this.messagingTemplate = messagingTemplate;
@@ -58,7 +61,7 @@ public class WebSocketServiceImpl implements WebSocketService {
         UserOnlineInfo info = new UserOnlineInfo(username, actualSessionId, System.currentTimeMillis());
         onlineUsers.put(username, info);
         log.info("用户[{}]上线，当前在线用户数：{}", username, onlineUsers.size());
-        
+
         // 通知在线用户状态变更
         notifyOnlineUsersChangeInternal();
     }
@@ -72,7 +75,7 @@ public class WebSocketServiceImpl implements WebSocketService {
     public void userDisconnected(String username) {
         onlineUsers.remove(username);
         log.info("用户[{}]下线，当前在线用户数：{}", username, onlineUsers.size());
-        
+
         // 通知在线用户状态变更
         notifyOnlineUsersChangeInternal();
     }
@@ -83,9 +86,7 @@ public class WebSocketServiceImpl implements WebSocketService {
      * @return 在线用户名列表
      */
     public List<UserOnlineDTO> getOnlineUsers() {
-        return onlineUsers.values().stream()
-                .map(info -> new UserOnlineDTO(info.getUsername(), info.getLoginTime()))
-                .collect(Collectors.toList());
+        return onlineUsers.values().stream().map(info -> new UserOnlineDTO(info.getUsername(), info.getLoginTime())).collect(Collectors.toList());
     }
 
     /**
@@ -106,7 +107,7 @@ public class WebSocketServiceImpl implements WebSocketService {
     public boolean isUserOnline(String username) {
         return onlineUsers.containsKey(username);
     }
-    
+
     /**
      * 手动触发在线用户变更通知
      * 供外部手动触发通知使用
@@ -115,7 +116,7 @@ public class WebSocketServiceImpl implements WebSocketService {
         log.info("手动触发在线用户数量通知，当前在线用户数：{}", onlineUsers.size());
         sendOnlineUserCount();
     }
-    
+
     /**
      * 发送在线用户数量（简化版，不包含用户详情）
      */
@@ -124,7 +125,7 @@ public class WebSocketServiceImpl implements WebSocketService {
             log.warn("消息模板尚未初始化，无法发送在线用户数量");
             return;
         }
-        
+
         try {
             // 直接发送数量，更轻量
             int count = onlineUsers.size();
@@ -134,7 +135,7 @@ public class WebSocketServiceImpl implements WebSocketService {
             log.error("发送在线用户数量失败", e);
         }
     }
-    
+
     /**
      * 内部通用通知方法
      * 通知所有客户端在线用户变更
@@ -144,7 +145,7 @@ public class WebSocketServiceImpl implements WebSocketService {
             log.warn("消息模板尚未初始化，无法发送在线用户数量通知");
             return;
         }
-        
+
         // 只发送简化版数据（仅数量）
         sendOnlineUserCount();
     }
@@ -159,14 +160,6 @@ public class WebSocketServiceImpl implements WebSocketService {
         private final long loginTime;
     }
 
-    /**
-     * 用户在线DTO（用于返回给前端）
-     */
-    @Data
-    public static class UserOnlineDTO {
-        private final String username;
-        private final long loginTime;
-    }
 
     /**
      * 在线用户变更事件
@@ -204,7 +197,7 @@ public class WebSocketServiceImpl implements WebSocketService {
             log.warn("消息模板尚未初始化，无法发送字典更新通知");
             return;
         }
-        
+
         try {
             String message = objectMapper.writeValueAsString(event);
             messagingTemplate.convertAndSend("/topic/dict", message);
@@ -216,9 +209,9 @@ public class WebSocketServiceImpl implements WebSocketService {
 
     /**
      * 向特定用户发送系统消息
-     * 
+     *
      * @param username 用户名
-     * @param message 消息内容
+     * @param message  消息内容
      */
     @Override
     public void sendNotification(String username, Object message) {
@@ -226,7 +219,7 @@ public class WebSocketServiceImpl implements WebSocketService {
             log.warn("消息模板尚未初始化，无法发送用户消息");
             return;
         }
-        
+
         try {
             String messageJson = objectMapper.writeValueAsString(message);
             messagingTemplate.convertAndSendToUser(username, "/queue/messages", messageJson);
@@ -235,10 +228,10 @@ public class WebSocketServiceImpl implements WebSocketService {
             log.error("向用户[{}]发送消息失败", username, e);
         }
     }
-    
+
     /**
      * 发送广播消息给所有用户
-     * 
+     *
      * @param message 消息内容
      */
     public void broadcastMessage(String message) {
@@ -246,7 +239,7 @@ public class WebSocketServiceImpl implements WebSocketService {
             log.warn("消息模板尚未初始化，无法发送广播消息");
             return;
         }
-        
+
         try {
             SystemMessage systemMessage = new SystemMessage("系统", message, System.currentTimeMillis());
             String messageJson = objectMapper.writeValueAsString(systemMessage);
@@ -256,7 +249,7 @@ public class WebSocketServiceImpl implements WebSocketService {
             log.error("发送广播消息失败", e);
         }
     }
-    
+
     /**
      * 系统消息对象
      */
@@ -265,7 +258,7 @@ public class WebSocketServiceImpl implements WebSocketService {
         private String sender;
         private String content;
         private long timestamp;
-        
+
         public SystemMessage(String sender, String content, long timestamp) {
             this.sender = sender;
             this.content = content;

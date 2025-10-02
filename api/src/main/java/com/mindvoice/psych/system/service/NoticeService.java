@@ -1,7 +1,11 @@
 package com.mindvoice.psych.system.service;
 
+import com.mindvoice.psych.common.pojo.PageResult;
 import com.mindvoice.psych.system.model.form.NoticeForm;
+import com.mindvoice.psych.system.model.query.NoticePageQuery;
 import com.mindvoice.psych.system.model.vo.NoticeDetailVO;
+import com.mindvoice.psych.system.model.vo.NoticePageVO;
+import com.mindvoice.psych.system.model.vo.UserNoticePageVO;
 
 /**
  * 通知公告服务类
@@ -69,4 +73,7 @@ public interface NoticeService {
     NoticeDetailVO getNoticeDetail(Long id);
 
 
+    PageResult<NoticePageVO> getNoticePage(NoticePageQuery queryParams);
+
+    PageResult<UserNoticePageVO> getMyNoticePage(NoticePageQuery queryParams);
 }

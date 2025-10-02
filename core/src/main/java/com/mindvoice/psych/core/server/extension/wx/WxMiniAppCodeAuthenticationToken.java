@@ -1,4 +1,4 @@
-package com.mindvoice.psych.core.security.extension.wx;
+package com.mindvoice.psych.core.server.extension.wx;
 
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;

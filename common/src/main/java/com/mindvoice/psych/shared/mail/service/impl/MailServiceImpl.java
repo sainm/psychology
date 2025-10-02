@@ -1,6 +1,6 @@
 package com.mindvoice.psych.shared.mail.service.impl;
 
-import com.mindvoice.psych.config.property.MailProperties;
+import com.mindvoice.psych.shared.mail.model.MailProperties;
 import com.mindvoice.psych.shared.mail.service.MailService;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;

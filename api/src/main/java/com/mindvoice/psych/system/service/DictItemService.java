@@ -1,7 +1,10 @@
 package com.mindvoice.psych.system.service;
 
+import com.mindvoice.psych.common.pojo.PageResult;
 import com.mindvoice.psych.system.model.form.DictItemForm;
+import com.mindvoice.psych.system.model.query.DictItemPageQuery;
 import com.mindvoice.psych.system.model.vo.DictItemOptionVO;
+import com.mindvoice.psych.system.model.vo.DictItemPageVO;
 
 import java.util.List;
 
@@ -52,4 +55,5 @@ public interface DictItemService {
      */
     void deleteDictItemByIds(String ids);
 
+    PageResult<DictItemPageVO> getDictItemPage(DictItemPageQuery queryParams);
 }

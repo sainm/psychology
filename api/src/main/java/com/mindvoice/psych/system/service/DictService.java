@@ -1,7 +1,10 @@
 package com.mindvoice.psych.system.service;
 
 import com.mindvoice.psych.common.model.Option;
+import com.mindvoice.psych.common.pojo.PageResult;
 import com.mindvoice.psych.system.model.form.DictForm;
+import com.mindvoice.psych.system.model.query.DictPageQuery;
+import com.mindvoice.psych.system.model.vo.DictPageVO;
 
 import java.util.List;
 
@@ -61,4 +64,6 @@ public interface DictService {
      * @return 字典编码列表
      */
     List<String> getDictCodesByIds(List<String> ids);
+
+    PageResult<DictPageVO> getDictPage(DictPageQuery queryParams);
 }

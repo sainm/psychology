@@ -4,7 +4,7 @@ import com.mindvoice.psych.common.annotation.Log;
 import com.mindvoice.psych.common.annotation.RepeatSubmit;
 import com.mindvoice.psych.common.enums.LogModuleEnum;
 import com.mindvoice.psych.common.model.Option;
-import com.mindvoice.psych.common.result.Result;
+import com.mindvoice.psych.common.pojo.CommonResult;
 import com.mindvoice.psych.system.model.form.DeptForm;
 import com.mindvoice.psych.system.model.query.DeptQuery;
 import com.mindvoice.psych.system.model.vo.DeptVO;
@@ -18,6 +18,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
+import static com.mindvoice.psych.common.pojo.CommonResult.success;
 
 /**
  * 部门控制器
@@ -35,17 +37,15 @@ public class DeptController {
 
     @Operation(summary = "部门列表")
     @GetMapping
-    @Log( value = "部门列表",module = LogModuleEnum.DEPT)
-    public Result<List<DeptVO>> getDeptList(
-             DeptQuery queryParams
-    ) {
+    @Log(value = "部门列表", module = LogModuleEnum.DEPT)
+    public CommonResult<List<DeptVO>> getDeptList(DeptQuery queryParams) {
         List<DeptVO> list = deptService.getDeptList(queryParams);
-        return Result.success(list);
+        return success(list);
     }
 
     @Operation(summary = "部门下拉列表")
     @GetMapping("/options")
-    public Result<List<Option<Long>>> getDeptOptions() {
+    public CommonResult<List<Option<Long>>> getDeptOptions() {
         List<Option<Long>> list = deptService.listDeptOptions();
         return Result.success(list);
     }
@@ -54,18 +54,14 @@ public class DeptController {
     @PostMapping
     @PreAuthorize("@ss.hasPerm('sys:dept:add')")
     @RepeatSubmit
-    public Result<?> saveDept(
-            @Valid @RequestBody DeptForm formData
-    ) {
+    public CommonResult<?> saveDept(@Valid @RequestBody DeptForm formData) {
         Long id = deptService.saveDept(formData);
         return Result.success(id);
     }
 
     @Operation(summary = "获取部门表单数据")
     @GetMapping("/{deptId}/form")
-    public Result<DeptForm> getDeptForm(
-            @Parameter(description ="部门ID") @PathVariable Long deptId
-    ) {
+    public CommonResult<DeptForm> getDeptForm(@Parameter(description = "部门ID") @PathVariable Long deptId) {
         DeptForm deptForm = deptService.getDeptForm(deptId);
         return Result.success(deptForm);
     }
@@ -73,10 +69,7 @@ public class DeptController {
     @Operation(summary = "修改部门")
     @PutMapping(value = "/{deptId}")
     @PreAuthorize("@ss.hasPerm('sys:dept:edit')")
-    public Result<?> updateDept(
-            @PathVariable Long deptId,
-            @Valid @RequestBody DeptForm formData
-    ) {
+    public CommonResult<?> updateDept(@PathVariable Long deptId, @Valid @RequestBody DeptForm formData) {
         deptId = deptService.updateDept(deptId, formData);
         return Result.success(deptId);
     }
@@ -84,9 +77,7 @@ public class DeptController {
     @Operation(summary = "删除部门")
     @DeleteMapping("/{ids}")
     @PreAuthorize("@ss.hasPerm('sys:dept:delete')")
-    public Result<?> deleteDepartments(
-            @Parameter(description ="部门ID，多个以英文逗号(,)分割") @PathVariable("ids") String ids
-    ) {
+    public CommonResult<?> deleteDepartments(@Parameter(description = "部门ID，多个以英文逗号(,)分割") @PathVariable("ids") String ids) {
         boolean result = deptService.deleteByIds(ids);
         return Result.judge(result);
     }

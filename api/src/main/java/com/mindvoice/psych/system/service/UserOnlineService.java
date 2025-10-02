@@ -1,7 +1,7 @@
 package com.mindvoice.psych.system.service;
 
-import com.mindvoice.psych.system.service.impl.WebSocketServiceImpl;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
+
+import com.mindvoice.psych.system.model.dto.UserOnlineDTO;
 
 import java.util.List;
 
@@ -34,7 +34,7 @@ public interface UserOnlineService {
      *
      * @return 在线用户名列表
      */
-    public List<WebSocketServiceImpl.UserOnlineDTO> getOnlineUsers();
+    public List<UserOnlineDTO> getOnlineUsers();
 
     /**
      * 获取在线用户数量

@@ -1,4 +1,4 @@
-package com.mindvoice.psych.core.filter;
+package com.mindvoice.psych.filter;
 
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.util.StrUtil;

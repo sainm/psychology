@@ -2,7 +2,7 @@ package com.mindvoice.psych.common.exception;
 
 import cn.hutool.core.util.StrUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.mindvoice.psych.common.result.Result;
+import com.mindvoice.psych.common.pojo.CommonResult;
 import com.mindvoice.psych.common.result.ResultCode;
 import jakarta.servlet.ServletException;
 import jakarta.validation.ConstraintViolation;
@@ -30,6 +30,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import static com.mindvoice.psych.common.pojo.CommonResult.error;
+
 /**
  * 全局系统异常处理器
  * <p>
@@ -46,10 +48,10 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(BindException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public <T> Result<T> processException(BindException e) {
+    public <T> CommonResult<T> processException(BindException e) {
         log.error("BindException:{}", e.getMessage());
         String msg = e.getAllErrors().stream().map(DefaultMessageSourceResolvable::getDefaultMessage).collect(Collectors.joining("；"));
-        return Result.failed(ResultCode.USER_REQUEST_PARAMETER_ERROR, msg);
+        return error(ResultCode.USER_REQUEST_PARAMETER_ERROR, msg);
     }
 
     /**
@@ -60,10 +62,10 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(ConstraintViolationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public <T> Result<T> processException(ConstraintViolationException e) {
+    public <T> CommonResult<T> processException(ConstraintViolationException e) {
         log.error("ConstraintViolationException:{}", e.getMessage());
         String msg = e.getConstraintViolations().stream().map(ConstraintViolation::getMessage).collect(Collectors.joining("；"));
-        return Result.failed(ResultCode.INVALID_USER_INPUT, msg);
+        return error(ResultCode.INVALID_USER_INPUT, msg);
     }
 
     /**
@@ -74,7 +76,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public <T> Result<T> processException(MethodArgumentNotValidException e) {
+    public <T> CommonResult<T> processException(MethodArgumentNotValidException e) {
         log.error("MethodArgumentNotValidException:{}", e.getMessage());
         String msg = e.getBindingResult().getAllErrors().stream().map(DefaultMessageSourceResolvable::getDefaultMessage).collect(Collectors.joining("；"));
         return Result.failed(ResultCode.INVALID_USER_INPUT, msg);
@@ -87,9 +89,9 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(NoHandlerFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public <T> Result<T> processException(NoHandlerFoundException e) {
+    public <T> CommonResult<T> processException(NoHandlerFoundException e) {
         log.error(e.getMessage(), e);
-        return Result.failed(ResultCode.INTERFACE_NOT_EXIST);
+        return error(ResultCode.INTERFACE_NOT_EXIST);
     }
 
     /**
@@ -99,7 +101,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(MissingServletRequestParameterException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public <T> Result<T> processException(MissingServletRequestParameterException e) {
+    public <T> CommonResult<T> processException(MissingServletRequestParameterException e) {
         log.error(e.getMessage(), e);
         return Result.failed(ResultCode.REQUEST_REQUIRED_PARAMETER_IS_EMPTY);
     }
@@ -111,7 +113,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public <T> Result<T> processException(MethodArgumentTypeMismatchException e) {
+    public <T> CommonResult<T> processException(MethodArgumentTypeMismatchException e) {
         log.error(e.getMessage(), e);
         return Result.failed(ResultCode.PARAMETER_FORMAT_MISMATCH, "类型错误");
     }
@@ -123,7 +125,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(ServletException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public <T> Result<T> processException(ServletException e) {
+    public <T> CommonResult<T> processException(ServletException e) {
         log.error(e.getMessage(), e);
         return Result.failed(e.getMessage());
     }
@@ -135,7 +137,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(IllegalArgumentException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public <T> Result<T> handleIllegalArgumentException(IllegalArgumentException e) {
+    public <T> CommonResult<T> handleIllegalArgumentException(IllegalArgumentException e) {
         log.error("非法参数异常，异常原因：{}", e.getMessage(), e);
         return Result.failed(e.getMessage());
     }
@@ -147,7 +149,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(JsonProcessingException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public <T> Result<T> handleJsonProcessingException(JsonProcessingException e) {
+    public <T> CommonResult<T> handleJsonProcessingException(JsonProcessingException e) {
         log.error("Json转换异常，异常原因：{}", e.getMessage(), e);
         return Result.failed(e.getMessage());
     }
@@ -159,7 +161,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(HttpMessageNotReadableException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public <T> Result<T> processException(HttpMessageNotReadableException e) {
+    public <T> CommonResult<T> processException(HttpMessageNotReadableException e) {
         log.error(e.getMessage(), e);
         String errorMessage = "请求体不可为空";
         Throwable cause = e.getCause();
@@ -176,7 +178,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(TypeMismatchException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public <T> Result<T> processException(TypeMismatchException e) {
+    public <T> CommonResult<T> processException(TypeMismatchException e) {
         log.error(e.getMessage(), e);
         return Result.failed(e.getMessage());
     }
@@ -188,7 +190,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(BadSqlGrammarException.class)
     @ResponseStatus(HttpStatus.FORBIDDEN)
-    public <T> Result<T> handleBadSqlGrammarException(BadSqlGrammarException e) {
+    public <T> CommonResult<T> handleBadSqlGrammarException(BadSqlGrammarException e) {
         log.error(e.getMessage(), e);
         String errorMsg = e.getMessage();
         if (StrUtil.isNotBlank(errorMsg) && errorMsg.contains("denied to user")) {
@@ -205,7 +207,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(SQLSyntaxErrorException.class)
     @ResponseStatus(HttpStatus.FORBIDDEN)
-    public <T> Result<T> processSQLSyntaxErrorException(SQLSyntaxErrorException e) {
+    public <T> CommonResult<T> processSQLSyntaxErrorException(SQLSyntaxErrorException e) {
         log.error(e.getMessage(), e);
         return Result.failed(ResultCode.DATABASE_EXECUTION_SYNTAX_ERROR);
     }
@@ -230,10 +232,10 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(BusinessException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public <T> Result<T> handleBizException(BusinessException e) {
+    public <T> CommonResult<T> handleBizException(BusinessException e) {
         log.error("biz exception", e);
         if (e.getResultCode() != null) {
-            return Result.failed(e.getResultCode(), e.getMessage());
+            return failed(e.getResultCode(), e.getMessage());
         }
         return Result.failed(e.getMessage());
     }
@@ -245,7 +247,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public <T> Result<T> handleException(Exception e) throws Exception {
+    public <T> CommonResult<T> handleException(Exception e) throws Exception {
         // 将 Spring Security 异常继续抛出，以便交给自定义处理器处理
         if (e instanceof AccessDeniedException
                 || e instanceof AuthenticationException) {

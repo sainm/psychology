@@ -1,6 +1,5 @@
 package com.mindvoice.psych.shared.file.controller;
 
-import com.mindvoice.psych.common.result.Result;
 import com.mindvoice.psych.shared.file.service.FileService;
 import com.mindvoice.psych.shared.file.model.FileInfo;
 import io.swagger.v3.oas.annotations.Parameter;

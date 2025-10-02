@@ -1,13 +1,15 @@
 package com.mindvoice.psych.system.service;
 
+import com.mindvoice.psych.common.pojo.PageResult;
 import com.mindvoice.psych.system.model.dto.CurrentUserDTO;
 import com.mindvoice.psych.system.model.dto.UserExportDTO;
-import com.mindvoice.psych.api.system.model.form.*;
 import com.mindvoice.psych.system.model.form.*;
 import com.mindvoice.psych.system.model.query.UserPageQuery;
+import com.mindvoice.psych.system.model.vo.UserPageVO;
 import com.mindvoice.psych.system.model.vo.UserProfileVO;
 import com.mindvoice.psych.common.model.Option;
 import com.mindvoice.psych.core.security.model.UserAuthCredentials;
+import jakarta.validation.Valid;
 
 
 import java.util.List;
@@ -153,7 +155,7 @@ public interface UserService  {
      *
      * @return {@link List<Option<String>>} 用户选项列表
      */
-    List<Option<String>> listUserOptions();
+    List<UserForm> listUserOptions();
 
     /**
      * 根据 openid 获取用户认证信息
@@ -197,4 +199,5 @@ public interface UserService  {
      */
     boolean bindUserOpenId(Long userId, String openId);
 
+    PageResult<UserPageVO> getUserPage(@Valid UserPageQuery queryParams);
 }

@@ -13,12 +13,13 @@ import com.mindvoice.psych.auth.model.dto.WxMiniAppPhoneLoginDTO;
 import com.mindvoice.psych.common.constant.RedisConstants;
 import com.mindvoice.psych.common.constant.SecurityConstants;
 import com.mindvoice.psych.config.property.CaptchaProperties;
-import com.mindvoice.psych.core.security.extension.sms.SmsAuthenticationToken;
-import com.mindvoice.psych.core.security.extension.wx.WxMiniAppCodeAuthenticationToken;
-import com.mindvoice.psych.core.security.extension.wx.WxMiniAppPhoneAuthenticationToken;
+
 import com.mindvoice.psych.core.security.model.AuthenticationToken;
 import com.mindvoice.psych.core.security.token.TokenManager;
 import com.mindvoice.psych.core.security.util.SecurityUtils;
+import com.mindvoice.psych.core.server.extension.sms.SmsAuthenticationToken;
+import com.mindvoice.psych.core.server.extension.wx.WxMiniAppCodeAuthenticationToken;
+import com.mindvoice.psych.core.server.extension.wx.WxMiniAppPhoneAuthenticationToken;
 import com.mindvoice.psych.shared.sms.enums.SmsTypeEnum;
 import com.mindvoice.psych.shared.sms.service.SmsService;
 import lombok.RequiredArgsConstructor;

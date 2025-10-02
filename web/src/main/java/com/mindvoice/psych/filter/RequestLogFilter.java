@@ -1,4 +1,4 @@
-package com.mindvoice.psych.core.filter;
+package com.mindvoice.psych.filter;
 
 import com.mindvoice.psych.common.util.IPUtils;
 import jakarta.servlet.http.HttpServletRequest;

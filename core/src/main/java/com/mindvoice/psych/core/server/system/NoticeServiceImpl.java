@@ -22,8 +22,6 @@ import com.mindvoice.psych.system.model.query.NoticePageQuery;
 import com.mindvoice.psych.system.model.vo.NoticeDetailVO;
 import com.mindvoice.psych.system.model.vo.UserNoticePageVO;
 import com.mindvoice.psych.system.service.NoticeService;
-import com.mindvoice.psych.system.service.UserNoticeService;
-import com.mindvoice.psych.system.service.UserService;
 import com.mindvoice.psych.common.exception.BusinessException;
 import com.mindvoice.psych.core.security.util.SecurityUtils;
 import com.mindvoice.psych.system.enums.NoticePublishStatusEnum;

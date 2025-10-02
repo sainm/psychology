@@ -5,8 +5,6 @@ import com.mindvoice.psych.common.annotation.Log;
 import com.mindvoice.psych.common.annotation.RepeatSubmit;
 import com.mindvoice.psych.common.enums.LogModuleEnum;
 import com.mindvoice.psych.common.model.Option;
-import com.mindvoice.psych.common.result.PageResult;
-import com.mindvoice.psych.common.result.Result;
 import com.mindvoice.psych.system.model.form.RoleForm;
 import com.mindvoice.psych.system.model.query.RolePageQuery;
 import com.mindvoice.psych.system.model.vo.RolePageVO;

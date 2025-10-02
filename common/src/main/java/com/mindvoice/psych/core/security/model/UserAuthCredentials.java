@@ -1,6 +1,7 @@
 package com.mindvoice.psych.core.security.model;
 
 import lombok.Data;
+
 import java.util.Set;
 
 /**

@@ -20,7 +20,6 @@ import com.mindvoice.psych.system.model.dto.UserExportDTO;
 import com.mindvoice.psych.system.model.form.*;
 import com.mindvoice.psych.system.model.query.UserPageQuery;
 import com.mindvoice.psych.system.model.vo.UserProfileVO;
-import com.mindvoice.psych.system.service.DictItemService;
 import com.mindvoice.psych.system.service.RoleService;
 import com.mindvoice.psych.system.service.UserRoleService;
 import com.mindvoice.psych.system.service.UserService;
@@ -29,7 +28,7 @@ import com.mindvoice.psych.common.constant.SystemConstants;
 import com.mindvoice.psych.common.exception.BusinessException;
 import com.mindvoice.psych.common.model.Option;
 import com.mindvoice.psych.core.security.model.UserAuthCredentials;
-import com.mindvoice.psych.core.security.service.PermissionService;
+import com.mindvoice.psych.core.server.security.PermissionService;
 import com.mindvoice.psych.core.security.token.TokenManager;
 import com.mindvoice.psych.core.security.util.SecurityUtils;
 import com.mindvoice.psych.shared.mail.service.MailService;
@@ -683,13 +682,13 @@ public class UserServiceImpl implements UserService {
      * @return {@link List<Option<String>>} 用户选项列表
      */
     @Override
-    public List<Option<String>> listUserOptions() {
+    public List<UserForm> listUserOptions() {
 
 //        List<User> list = this.list(new LambdaQueryWrapper<User>()
 //                .eq(User::getStatus, 1)
 //        );
         List<User> users = userMapper.selectList(new LambdaQueryWrapper<User>().eq(User::getStatus, 1));
-        return userConverter.toOptions(list);
+        return BeanUtils.toBean(users, UserForm.class);
     }
 
 }

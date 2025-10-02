@@ -1,6 +1,6 @@
 package com.mindvoice.psych.common.annotation;
 
-import com.mindvoice.psych.core.validator.FieldValidator;
+import com.mindvoice.psych.common.validator.FieldValidator;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 

@@ -1,8 +1,8 @@
 package com.mindvoice.psych.controller.system;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.mindvoice.psych.common.result.PageResult;
-import com.mindvoice.psych.common.result.Result;
+import com.mindvoice.psych.common.pojo.CommonResult;
+import com.mindvoice.psych.common.pojo.PageResult;
 import com.mindvoice.psych.system.model.query.LogPageQuery;
 import com.mindvoice.psych.system.model.vo.LogPageVO;
 import com.mindvoice.psych.system.model.vo.VisitStatsVO;
@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
+
+import static com.mindvoice.psych.common.pojo.CommonResult.success;
 
 /**
  * 日志控制层
@@ -35,30 +37,25 @@ public class LogController {
 
     @Operation(summary = "日志分页列表")
     @GetMapping("/page")
-    public PageResult<LogPageVO> getLogPage(
-             LogPageQuery queryParams
-    ) {
-        Page<LogPageVO> result = logService.getLogPage(queryParams);
-        return PageResult.success(result);
+    public CommonResult<PageResult<LogPageVO>> getLogPage(LogPageQuery queryParams) {
+        PageResult<LogPageVO> result = logService.getLogPage(queryParams);
+        return success(result);
     }
 
     @Operation(summary = "获取访问趋势")
     @GetMapping("/visit-trend")
-    public Result<VisitTrendVO> getVisitTrend(
-            @Parameter(description = "开始时间", example = "yyyy-MM-dd") @RequestParam String startDate,
-            @Parameter(description = "结束时间", example = "yyyy-MM-dd") @RequestParam String endDate
-    ) {
+    public CommonResult<VisitTrendVO> getVisitTrend(@Parameter(description = "开始时间", example = "yyyy-MM-dd") @RequestParam String startDate, @Parameter(description = "结束时间", example = "yyyy-MM-dd") @RequestParam String endDate) {
         LocalDate start = LocalDate.parse(startDate);
         LocalDate end = LocalDate.parse(endDate);
         VisitTrendVO data = logService.getVisitTrend(start, end);
-        return Result.success(data);
+        return success(data);
     }
 
     @Operation(summary = "获取访问统计")
     @GetMapping("/visit-stats")
-    public Result<VisitStatsVO> getVisitStats() {
+    public CommonResult<VisitStatsVO> getVisitStats() {
         VisitStatsVO result = logService.getVisitStats();
-        return Result.success(result);
+        return success(result);
     }
 
 }

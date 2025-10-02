@@ -1,6 +1,10 @@
 package com.mindvoice.psych.system.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.mindvoice.psych.common.pojo.PageResult;
 import com.mindvoice.psych.system.model.form.ConfigForm;
+import com.mindvoice.psych.system.model.query.ConfigPageQuery;
+import com.mindvoice.psych.system.model.vo.ConfigVO;
 
 /**
  * 系统配置Service接口
@@ -53,4 +57,5 @@ public interface ConfigService  {
      */
     Object getSystemConfig(String key);
 
+    PageResult<ConfigVO> page(ConfigPageQuery configPageQuery);
 }

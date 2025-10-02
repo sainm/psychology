@@ -1,7 +1,6 @@
 package com.mindvoice.psych.common.util;
 
 import cn.hutool.json.JSONUtil;
-import com.mindvoice.psych.common.result.Result;
 import com.mindvoice.psych.common.result.ResultCode;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;

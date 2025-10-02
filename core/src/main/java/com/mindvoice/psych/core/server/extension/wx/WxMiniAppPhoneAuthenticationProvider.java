@@ -1,4 +1,4 @@
-package com.mindvoice.psych.core.security.extension.wx;
+package com.mindvoice.psych.core.server.extension.wx;
 
 import cn.binarywang.wx.miniapp.api.WxMaService;
 import cn.binarywang.wx.miniapp.bean.WxMaJscode2SessionResult;
@@ -7,6 +7,7 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.mindvoice.psych.core.security.model.SysUserDetails;
 import com.mindvoice.psych.core.security.model.UserAuthCredentials;
+import com.mindvoice.psych.system.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import me.chanjar.weixin.common.error.WxErrorException;
 import org.springframework.security.authentication.AuthenticationProvider;

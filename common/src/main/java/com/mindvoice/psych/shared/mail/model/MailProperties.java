@@ -1,4 +1,4 @@
-package com.mindvoice.psych.config.property;
+package com.mindvoice.psych.shared.mail.model;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
